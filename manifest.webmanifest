@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "صوّر واسمع",
+  "short_name": "صوّر واسمع",
+  "description": "كلمات درس الإنجليزي: نطق كل كلمة بالسرعة المناسبة، والأفعال وتصريفاتها.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F6F3FC",
+  "theme_color": "#6A3DC2",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

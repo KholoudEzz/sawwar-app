@@ -1,0 +1,1426 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6A3DC2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#120E1C" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style>
+<title>صوّر واسمع</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Baloo+Bhaijaan+2:wght@600;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a welcome card first (name + boy/girl), then one phone-first column on lavender squared exercise-book paper: sticky speed bar, read-the-page card, lesson chips, and the word sheet laid out like the textbook's English | Arabic vocab table */
+:root{
+  --paper:#F6F3FC;
+  --grid:#E9E3F5;
+  --sheet:#FFFFFF;
+  --ink:#1E1536;
+  --muted:#655B7F;
+  --line:#E0D8EF;
+  --accent:#6A3DC2;
+  --accent-ink:#FFFFFF;
+  --accent-soft:#EEE6FC;
+  --hl:#FFE45C;
+  --hl-ink:#3B3000;
+  --hl-stripe:#FFEB80;
+  --noun:#E2F3E7;
+  --noun-ink:#1C6838;
+  --adj:#FCE4EE;
+  --adj-ink:#9A2759;
+  --adv:#DCF2EF;
+  --adv-ink:#16625B;
+  --danger:#B53030;
+  --skin:#F3CBA3;
+  --skin-shade:#E3B38A;
+  --hair:#3E2A20;
+  --face-ink:#2B1D16;
+  --cheek:#F2A0A0;
+  --shirt-boy:#4D8BDF;
+  --shirt-girl:#E46CA8;
+  --font-display:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif;
+  --font-ar:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+  --font-en:"Andika","Segoe UI",Verdana,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#120E1C; --grid:#1A1528; --sheet:#19132A; --ink:#ECE6F8; --muted:#A79DC2; --line:#30274A;
+    --accent:#B99CF6; --accent-ink:#1A1030; --accent-soft:#2A2047;
+    --hl:#E8CF4A; --hl-ink:#1D1800; --hl-stripe:#5E5418;
+    --noun:#143023; --noun-ink:#8FD8A9; --adj:#3A1828; --adj-ink:#F3A6C4; --adv:#10302D; --adv-ink:#8ED9D0;
+    --danger:#F27C7C;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#120E1C; --grid:#1A1528; --sheet:#19132A; --ink:#ECE6F8; --muted:#A79DC2; --line:#30274A;
+  --accent:#B99CF6; --accent-ink:#1A1030; --accent-soft:#2A2047;
+  --hl:#E8CF4A; --hl-ink:#1D1800; --hl-stripe:#5E5418;
+  --noun:#143023; --noun-ink:#8FD8A9; --adj:#3A1828; --adj-ink:#F3A6C4; --adv:#10302D; --adv-ink:#8ED9D0;
+  --danger:#F27C7C;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink);
+  font-family:var(--font-ar);
+  font-size:16px;
+  line-height:1.6;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{
+  max-width:760px;margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0 0 0 0);pointer-events:none}
+svg{display:block}
+.avatar{display:block;flex:0 0 auto;border-radius:50%;overflow:hidden;background:var(--accent-soft)}
+.avatar svg{width:100%;height:100%}
+
+/* Welcome */
+.welcome .wrap{padding-block:28px 48px}
+.welcome-card{max-width:480px;margin:0 auto;background:var(--sheet);border:1px solid var(--line);border-radius:28px;padding:28px 22px;display:flex;flex-direction:column;gap:20px;text-align:center;box-shadow:0 22px 44px -28px rgba(70,35,140,.55)}
+.badge{width:68px;height:68px;margin:0 auto;border-radius:22px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--font-en);font-weight:700;font-size:1.6rem;transform:rotate(-6deg)}
+.welcome h1{margin:0;font-family:var(--font-display);font-weight:800;font-size:clamp(1.8rem,7vw,2.4rem);line-height:1.15;text-wrap:balance}
+.welcome p{margin:0;color:var(--muted)}
+.field{display:flex;flex-direction:column;gap:8px;text-align:right}
+.field > label,.picks legend{font-weight:700;font-size:1.05rem;padding:0}
+.name-input{width:100%;min-height:54px;padding:10px 16px;border-radius:16px;border:2px solid var(--line);background:var(--paper);font-size:1.2rem;font-weight:600}
+.name-input:focus{border-color:var(--accent)}
+.picks{border:0;margin:0;padding:0;min-width:0;text-align:right}
+.picks legend{margin-bottom:10px}
+.pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pick{position:relative;display:block}
+.pick-card{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 10px 12px;border-radius:22px;border:2px solid var(--line);background:var(--paper);cursor:pointer;transition:border-color .15s,background-color .15s,transform .15s}
+.pick-card .avatar{width:min(26vw,100px);height:min(26vw,100px)}
+.pick-card b{font-family:var(--font-display);font-size:1.25rem;line-height:1}
+.pick input:checked + .pick-card{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-2px)}
+.pick input:focus-visible + .pick-card{outline:3px solid var(--accent);outline-offset:2px}
+.form-err{margin:0;color:var(--danger);font-weight:600;font-size:.95rem}
+.btn.big{min-height:58px;font-size:1.2rem;border-radius:18px;width:100%}
+.hello .avatar{width:156px;height:156px;margin:0 auto;border:5px solid var(--accent);animation:pop .5s cubic-bezier(.2,1.4,.4,1) both}
+.hello h1 span{color:var(--accent)}
+@keyframes pop{from{transform:scale(.6);opacity:.2}to{transform:scale(1);opacity:1}}
+
+/* Top bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;appearance:none;border:0;background:none;padding:0;text-align:right}
+.brand .avatar{width:42px;height:42px;border:2px solid var(--accent)}
+.brand-name{font-family:var(--font-display);font-weight:800;font-size:1.35rem;line-height:1;white-space:nowrap}
+.speed{display:flex;align-items:center;gap:8px}
+.speed-label{font-size:.8rem;color:var(--muted);white-space:nowrap}
+.seg{display:flex;background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:3px;gap:2px}
+.seg button{appearance:none;border:0;background:transparent;border-radius:11px;min-width:54px;padding:4px 6px;display:flex;flex-direction:column;align-items:center;line-height:1.2}
+.seg button b{font-family:var(--font-en);font-size:.95rem;direction:ltr}
+.seg button small{font-size:.66rem;color:var(--muted);white-space:nowrap}
+.seg button[aria-checked="true"]{background:var(--accent);color:var(--accent-ink)}
+.seg button[aria-checked="true"] small{color:inherit}
+@media (max-width:560px){.brand-name,.speed-label{display:none}}
+
+main.wrap{display:flex;flex-direction:column;gap:22px;padding-block:20px 56px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 18px;border-radius:14px;border:1px solid var(--line);background:var(--sheet);font-weight:600;text-align:center}
+.btn svg{width:22px;height:22px;flex:0 0 auto}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.small{min-height:40px;padding:6px 14px;border-radius:12px;font-size:.92rem}
+.btn.small svg{width:18px;height:18px}
+.btn.danger{color:var(--danger);border-color:currentColor;background:transparent}
+.linkish{appearance:none;border:0;background:none;padding:4px 0;color:var(--accent);font-weight:600;text-decoration:underline;text-underline-offset:4px;align-self:flex-start}
+.welcome .linkish{align-self:center}
+
+/* Read-the-page card */
+.scan{background:var(--sheet);border:1px solid var(--line);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.scan .hello-line{color:var(--accent);font-family:var(--font-display);font-weight:800;font-size:1.15rem;line-height:1.2}
+.scan h1{font-family:var(--font-display);font-weight:800;font-size:clamp(1.55rem,5.4vw,2.1rem);line-height:1.2;margin:0;text-wrap:balance}
+.scan p{margin:0;color:var(--muted);max-width:62ch}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;counter-reset:step}
+.steps li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
+.steps li::before{counter-increment:step;content:counter(step,arabic-indic);width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:1.05rem}
+.steps b{display:block;line-height:1.4}
+.steps span{display:block;color:var(--muted);font-size:.92rem}
+.paste{width:100%;min-height:132px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--paper);font-family:var(--font-en);font-size:1rem;line-height:1.5;resize:vertical}
+.paste::placeholder{color:var(--muted);font-family:var(--font-ar)}
+.scan-actions{display:flex;flex-wrap:wrap;gap:10px}
+.scan-actions .btn{flex:1 1 190px}
+.alt{border-top:1px dashed var(--line);padding-top:14px;display:flex;flex-direction:column;gap:10px}
+.alt p{font-size:.9rem}
+.alt .scan-actions .btn{flex:1 1 150px}
+.status{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;border-radius:14px;background:var(--accent-soft)}
+.status img{width:64px;height:64px;object-fit:cover;border-radius:10px;background:var(--line)}
+.status b{display:block;line-height:1.4}
+.status span{display:block;font-size:.88rem;color:var(--muted)}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;position:relative;margin-top:8px}
+.bar::after{content:"";position:absolute;top:0;bottom:0;right:0;width:40%;background:var(--accent);border-radius:3px;animation:slide 1.4s ease-in-out infinite}
+@keyframes slide{from{transform:translateX(110%)}to{transform:translateX(-260%)}}
+.note{padding:10px 14px;border-radius:12px;border:1px dashed var(--line);font-size:.92rem;color:var(--muted)}
+.note.err{border-style:solid;border-color:var(--danger);color:var(--danger)}
+
+/* Lessons nav */
+.lessons-block{display:flex;flex-direction:column;gap:8px}
+.label{font-size:.78rem;font-weight:600;letter-spacing:.04em;color:var(--muted)}
+.lessons{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.chip{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--sheet);white-space:nowrap}
+.chip small{font-family:var(--font-en);color:var(--muted);font-variant-numeric:tabular-nums}
+.chip em{font-style:normal;font-size:.72rem;font-weight:600;background:var(--hl);color:var(--hl-ink);padding:0 7px;border-radius:6px}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip[aria-pressed="true"] small{color:inherit;opacity:.8}
+
+/* Lesson */
+.lesson{display:flex;flex-direction:column;gap:14px;scroll-margin-top:96px}
+.lh{display:flex;flex-direction:column;gap:12px}
+.lh-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.lesson-title{margin:0;font-family:var(--font-en);font-weight:700;font-size:1.3rem;line-height:1.3;background:var(--accent);color:var(--accent-ink);padding:4px 16px;border-radius:10px;max-width:100%;overflow-wrap:anywhere}
+.title-input{max-width:260px;min-height:44px;padding:6px 12px;border-radius:12px;border:1px solid var(--line);background:var(--sheet);font-family:var(--font-en);font-weight:700;font-size:1.15rem}
+.meta{color:var(--muted);font-size:.92rem}
+.spacer{flex:1 1 auto}
+.sample-note{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;background:var(--sheet);border:1px dashed var(--line);font-size:.92rem;color:var(--muted)}
+.sample-note span{flex:1 1 220px}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.accent-pick{display:inline-flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted)}
+.accent-pick select{min-height:40px;padding:4px 10px;border-radius:12px;border:1px solid var(--line);background:var(--sheet);color:var(--ink)}
+.filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.filter{flex:0 0 auto;min-height:36px;padding:4px 12px;border-radius:10px;border:1px solid var(--line);background:transparent;font-size:.9rem}
+.filter small{font-family:var(--font-en);color:var(--muted);margin-inline-start:4px;font-variant-numeric:tabular-nums}
+.filter[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--ink);font-weight:600}
+
+/* Word sheet */
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.words{list-style:none;margin:0;padding:0}
+.word{display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:12px;row-gap:8px;align-items:center;padding:14px 16px;transition:background-color .2s;scroll-margin-top:96px;scroll-margin-bottom:24px}
+.word + .word{border-top:1px solid var(--line)}
+.word.now{background:var(--accent-soft)}
+.editing .word{grid-template-columns:auto minmax(0,1fr) auto auto}
+.say{position:relative;width:46px;height:46px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;align-self:start}
+.say svg{width:22px;height:22px}
+.say.speaking::after,.say-sm.speaking::after,.form.speaking::after{content:"";position:absolute;inset:-5px;border-radius:inherit;border:2px solid var(--accent);animation:ring 1s ease-out infinite}
+@keyframes ring{from{opacity:1;transform:scale(.92)}to{opacity:0;transform:scale(1.18)}}
+.w-head{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;min-width:0}
+.en{font-family:var(--font-en);font-weight:700;font-size:1.32rem;line-height:1.3;overflow-wrap:anywhere}
+.is-verb .en{background:linear-gradient(transparent 56%,var(--hl-stripe) 56%,var(--hl-stripe) 94%,transparent 94%);padding-inline:2px;margin-inline:-2px}
+.tag{font-family:var(--font-en);font-size:.85rem;color:var(--muted);white-space:nowrap}
+.pos{font-size:.74rem;font-weight:600;line-height:1.5;padding:1px 8px;border-radius:6px;white-space:nowrap;background:var(--accent-soft);color:var(--ink)}
+.pos-verb{background:var(--hl);color:var(--hl-ink)}
+.pos-noun{background:var(--noun);color:var(--noun-ink)}
+.pos-adjective{background:var(--adj);color:var(--adj-ink)}
+.pos-adverb{background:var(--adv);color:var(--adv-ink)}
+.pos-in{min-height:34px;padding:2px 8px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font-size:.85rem}
+.ar{font-weight:600;font-size:1.05rem;line-height:1.5;text-align:right;max-width:min(42vw,250px)}
+.ar-in{width:min(34vw,180px);min-height:40px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:var(--paper);font-weight:600}
+.del{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--danger);display:grid;place-items:center}
+.del svg{width:18px;height:18px}
+.forms,.ex{grid-column:2 / -1}
+.forms{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+@media (max-width:560px){.forms{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.form{position:relative;display:flex;flex-direction:column;align-items:flex-start;width:100%;padding:3px 10px 5px;border-radius:10px;border:1px solid var(--line);background:var(--paper);line-height:1.25;min-width:0;text-align:left}
+.form small{font-size:.66rem;color:var(--muted);font-family:var(--font-ar)}
+.form b{font-family:var(--font-en);font-size:1rem;overflow-wrap:anywhere}
+.form mark{background:none;color:var(--accent);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.kind{font-size:.72rem;font-weight:600;padding:1px 9px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.kind.reg{color:var(--noun-ink)}
+.kind.irr{color:var(--adj-ink)}
+.ex{margin:0;display:flex;align-items:center;gap:8px;color:var(--muted);font-family:var(--font-en);font-size:.95rem;line-height:1.45}
+.say-sm{position:relative;width:30px;height:30px;flex:0 0 auto;border-radius:50%;border:1px solid var(--line);background:var(--sheet);color:var(--accent);display:grid;place-items:center}
+.say-sm svg{width:13px;height:13px}
+.empty{padding:28px 18px;text-align:center;color:var(--muted)}
+
+.add{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 16px;border-top:1px dashed var(--line);background:var(--paper)}
+.add .full{grid-column:1 / -1;font-size:.85rem;font-weight:600;color:var(--muted)}
+.add input,.add select{width:100%;min-height:44px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--sheet)}
+.add input[dir="ltr"]{font-family:var(--font-en)}
+
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;max-width:calc(100% - 32px);width:max-content;background:var(--ink);color:var(--sheet);padding:10px 16px;border-radius:12px;font-size:.92rem;box-shadow:0 8px 24px rgba(30,15,60,.28)}
+
+@media (prefers-reduced-motion: reduce){
+  .bar::after,.say.speaking::after,.say-sm.speaking::after,.form.speaking::after,.hello .avatar{animation:none}
+  .word,.pick-card{transition:none}
+}
+@media (max-width:380px){
+  .word{padding:12px;column-gap:10px}
+  .say{width:42px;height:42px}
+  .en{font-size:1.2rem}
+}
+</style>
+</head>
+<body>
+<div dir="rtl" lang="ar">
+  <section class="welcome" id="welcome" aria-label="صفحة الترحيب">
+    <div class="wrap">
+      <form class="welcome-card" id="welcome-form" autocomplete="off" novalidate>
+        <span class="badge" aria-hidden="true">Aa</span>
+        <h1>أهلًا وسهلًا في صوّر واسمع</h1>
+        <p>مكان لتعلّم كلمات درس الإنجليزي: نطق كل كلمة بالسرعة المناسبة، والأفعال وتصريفاتها.</p>
+        <div class="field">
+          <label for="student-name">ما اسمك؟</label>
+          <input class="name-input" id="student-name" maxlength="30" placeholder="الاسم" autocomplete="given-name">
+        </div>
+        <fieldset class="picks">
+          <legend>ولد أم بنت؟</legend>
+          <div class="pick-grid">
+            <label class="pick">
+              <input class="vh" type="radio" name="gender" id="gender-boy" value="boy">
+              <span class="pick-card"><span class="avatar" data-avatar="boy"></span><b>ولد</b></span>
+            </label>
+            <label class="pick">
+              <input class="vh" type="radio" name="gender" id="gender-girl" value="girl">
+              <span class="pick-card"><span class="avatar" data-avatar="girl"></span><b>بنت</b></span>
+            </label>
+          </div>
+        </fieldset>
+        <p class="form-err" id="welcome-err" role="alert" hidden></p>
+        <button type="submit" class="btn primary big">هيا نبدأ</button>
+      </form>
+
+      <div class="welcome-card hello" id="welcome-hello" hidden>
+        <span class="avatar" id="hello-avatar"></span>
+        <h1>مرحبًا يا <span id="hello-name"></span>!</h1>
+        <p data-t="helloSub">جاهز نتعلم كلمات جديدة؟</p>
+        <button type="button" class="btn primary big" data-action="enter-app" data-t="enterBtn">ابدأ</button>
+        <button type="button" class="linkish" data-action="profile">تغيير الاسم أو الصورة</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="app" hidden>
+    <header class="topbar">
+      <div class="wrap">
+        <button type="button" class="brand" data-action="profile" aria-label="تغيير الاسم أو الصورة">
+          <span class="avatar" id="me-avatar"></span>
+          <span class="brand-name">صوّر واسمع</span>
+        </button>
+        <div class="speed">
+          <span class="speed-label" id="speed-label">سرعة النطق</span>
+          <div class="seg" id="speed" role="radiogroup" aria-labelledby="speed-label">
+            <button type="button" role="radio" data-action="rate" data-rate="0.5" aria-checked="false"><b>0.5×</b><small>بطيء جدًا</small></button>
+            <button type="button" role="radio" data-action="rate" data-rate="0.75" aria-checked="false"><b>0.75×</b><small>بطيء</small></button>
+            <button type="button" role="radio" data-action="rate" data-rate="1" aria-checked="true"><b>1×</b><small>عادي</small></button>
+            <button type="button" role="radio" data-action="rate" data-rate="1.25" aria-checked="false"><b>1.25×</b><small>سريع</small></button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="scan" aria-labelledby="scan-title">
+        <p class="hello-line" id="hello-line" hidden></p>
+        <h1 id="scan-title" data-t="scanTitle">صوّر صفحة الكلمات</h1>
+        <p data-t="scanIntro">مجانًا وبدون اشتراك: اقرأ نص الصفحة بـ Google Lens والصقه هنا. يستخرج التطبيق الكلمات الإنجليزية، ويوضّح الأفعال وتصريفاتها، وتسمع نطق كل كلمة بالسرعة التي تناسبك.</p>
+        <ol class="steps">
+          <li><div><b data-t="step1Title">صوّر الصفحة بـ Google Lens</b><span data-t="step1Text">افتح تطبيق Google واضغط أيقونة الكاميرا، صوّر جدول الكلمات، ثم اضغط «اختيار الكل» أو حدّد النص، واضغط «نسخ».</span></div></li>
+          <li><div><b data-t="step2Title">الصق النص هنا</b><span data-t="step2Text">اضغط ضغطة طويلة داخل المربع واختر «لصق». على الآيفون يمكنك أيضًا اختيار «مسح النص ضوئيًا» من نفس القائمة.</span></div></li>
+        </ol>
+        <label class="vh" for="paste-box">النص المنسوخ من صورة الصفحة</label>
+        <textarea id="paste-box" class="paste" dir="auto" rows="5" spellcheck="false" autocapitalize="off" placeholder="مثال:
+notice (d) (v) يلاحظ
+cans (n) علب من المعدن"></textarea>
+        <div class="scan-actions">
+          <button type="button" class="btn primary" data-action="parse">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6.5h14M5 12h14M5 17.5h9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span data-t="parseBtn">استخرج الكلمات</span>
+          </button>
+        </div>
+        <p class="note" id="scan-note" hidden></p>
+
+        <div class="alt" id="claude-scan" hidden>
+          <p data-t="altText">أو صوّر الصفحة هنا مباشرة، وClaude يقرأ الكلمات مع معانيها العربية وجمل أمثلة. هذه الطريقة تستهلك من رصيد حسابك في Claude.</p>
+          <div class="scan-actions" id="scan-actions">
+            <button type="button" class="btn small" data-action="pick" data-target="cam-input">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.6l1.2-1.8A1.5 1.5 0 0 1 10.5 3.5h3a1.5 1.5 0 0 1 1.2.7L15.9 6h1.6A2.5 2.5 0 0 1 20 8.5v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12.5" r="3.4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+              <span data-t="camBtn">صوّر بالكاميرا</span>
+            </button>
+            <button type="button" class="btn small" data-action="pick" data-target="gallery-input">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="10" r="1.8" fill="currentColor"/><path d="M4 17l5-4.5 3.5 3 3-2.5L20 17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              <span data-t="galBtn">اختر صورة</span>
+            </button>
+          </div>
+          <input id="cam-input" class="vh" type="file" accept="image/*" capture="environment" tabindex="-1" aria-hidden="true">
+          <input id="gallery-input" class="vh" type="file" accept="image/*" tabindex="-1" aria-hidden="true">
+          <div class="status" id="status" hidden>
+            <img id="status-img" alt="الصورة التي يتم قراءتها">
+            <div>
+              <b id="status-title">جاري قراءة الصفحة…</b>
+              <span id="status-sub">قد يستغرق ذلك حتى دقيقة.</span>
+              <div class="bar" aria-hidden="true"></div>
+            </div>
+            <button type="button" class="btn small" data-action="stop-scan">إيقاف</button>
+          </div>
+        </div>
+        <button type="button" class="linkish" data-action="new-lesson" data-t="manual">أو اكتب كلمات الدرس بنفسك</button>
+      </section>
+
+      <section class="lessons-block" aria-labelledby="lessons-label">
+        <span class="label" id="lessons-label">دروسك</span>
+        <nav class="lessons" id="lessons" aria-labelledby="lessons-label"></nav>
+      </section>
+
+      <section class="lesson" id="lesson">
+        <div id="lesson-head"></div>
+        <div class="sheet" id="sheet">
+          <ol class="words" id="words" dir="ltr"></ol>
+          <form class="add" id="add-form" hidden autocomplete="off">
+            <span class="full" data-t="addTitle">أضف كلمة إلى هذا الدرس</span>
+            <input id="add-en" dir="ltr" lang="en" placeholder="English word" required maxlength="80" aria-label="الكلمة بالإنجليزية">
+            <input id="add-ar" dir="rtl" placeholder="المعنى بالعربي (اختياري)" maxlength="120" aria-label="المعنى بالعربي">
+            <select id="add-pos" aria-label="نوع الكلمة">
+              <option value="auto">النوع: تلقائي</option>
+              <option value="verb">فعل</option>
+              <option value="noun">اسم</option>
+              <option value="adjective">صفة</option>
+              <option value="adverb">ظرف</option>
+              <option value="other">أخرى</option>
+            </select>
+            <button type="submit" class="btn primary small" data-t="addBtn">أضف الكلمة</button>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const str = (v, max) => typeof v === 'string' ? v.replace(/\s+/g, ' ').trim().slice(0, max) : '';
+const arNum = n => Number(n).toLocaleString('ar-EG');
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const LS = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+};
+const hasClaude = !!(window.claude && typeof window.claude.use === 'function');
+const use = name => hasClaude ? window.claude.use(name).catch(() => null) : Promise.resolve(null);
+
+function countWords(n) {
+  if (n === 1) return 'كلمة واحدة';
+  if (n === 2) return 'كلمتان';
+  if (n >= 3 && n <= 10) return `${arNum(n)} كلمات`;
+  return `${arNum(n)} كلمة`;
+}
+function countVerbs(n) {
+  if (n === 0) return 'بدون أفعال';
+  if (n === 1) return 'فعل واحد';
+  if (n === 2) return 'فعلان';
+  if (n >= 3 && n <= 10) return `${arNum(n)} أفعال`;
+  return `${arNum(n)} فعلًا`;
+}
+
+const ICON = {
+  speaker: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.6L13 19V5L7.6 9.5z" fill="currentColor"/><path d="M16.3 8.7a4.8 4.8 0 0 1 0 6.6M18.8 6.2a8.4 8.4 0 0 1 0 11.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg>',
+  stop: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>',
+  x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+  pencil: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+  check: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  save: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h9.5L20 8v12.5H4V3.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 3.5v5h7v-5M8 20.5v-6h8v6" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>',
+};
+
+/* ---------- student avatars ---------- */
+const FACE = `
+  <rect x="52" y="72" width="16" height="16" rx="5" fill="var(--skin-shade)"/>
+  <circle cx="33" cy="57" r="6" fill="var(--skin)"/><circle cx="87" cy="57" r="6" fill="var(--skin)"/>
+  <ellipse cx="60" cy="55" rx="27" ry="28" fill="var(--skin)"/>`;
+const EYES = `
+  <circle cx="50" cy="58" r="3.4" fill="var(--face-ink)"/><circle cx="70" cy="58" r="3.4" fill="var(--face-ink)"/>
+  <circle cx="51.2" cy="56.8" r="1" fill="#fff"/><circle cx="71.2" cy="56.8" r="1" fill="#fff"/>
+  <circle cx="43" cy="67" r="4.5" fill="var(--cheek)" opacity=".6"/><circle cx="77" cy="67" r="4.5" fill="var(--cheek)" opacity=".6"/>
+  <path d="M52 69q8 7 16 0" fill="none" stroke="var(--face-ink)" stroke-width="2.6" stroke-linecap="round"/>`;
+const AVATAR = {
+  boy: `<svg viewBox="0 0 120 120" aria-hidden="true">
+    <path d="M16 122c2-24 20-38 44-38s42 14 44 38z" fill="var(--shirt-boy)"/>
+    <path d="M50 84l10 10 10-10z" fill="var(--sheet)"/>
+    ${FACE}
+    <path d="M33 55C30 35 42 23 60 23s30 12 27 32c-3-8-9-13-17-14-8 6-21 8-32 5-2 2-4 5-5 9z" fill="var(--hair)"/>
+    ${EYES}
+  </svg>`,
+  girl: `<svg viewBox="0 0 120 120" aria-hidden="true">
+    <path d="M30 60C24 36 40 20 60 20s36 16 30 40c5 14 3 30-4 40H34c-7-10-9-26-4-40z" fill="var(--hair)"/>
+    <path d="M16 122c2-24 20-38 44-38s42 14 44 38z" fill="var(--shirt-girl)"/>
+    ${FACE}
+    <path d="M33 54C31 35 43 23 60 23s29 12 27 31c-7-7-16-10-25-10-6 4-15 6-22 6-3 0-5 2-7 4z" fill="var(--hair)"/>
+    <path d="M78 25l12-8v16zM78 25l-12-8v16z" fill="var(--accent)"/><circle cx="78" cy="25" r="4" fill="var(--accent)"/>
+    ${EYES}
+  </svg>`,
+};
+
+/* ---------- verb forms (worked out on the phone, no service needed) ---------- */
+const IRR_SRC = 'arise arose arisen;awake awoke awoken;be was/were been;bear bore born;beat beat beaten;become became become;begin began begun;bend bent bent;bet bet bet;bind bound bound;bite bit bitten;bleed bled bled;blow blew blown;break broke broken;breed bred bred;bring brought brought;broadcast broadcast broadcast;build built built;burn burnt/burned burnt/burned;burst burst burst;buy bought bought;catch caught caught;choose chose chosen;cling clung clung;come came come;cost cost cost;creep crept crept;cut cut cut;deal dealt dealt;dig dug dug;do did done;draw drew drawn;dream dreamt/dreamed dreamt/dreamed;drink drank drunk;drive drove driven;eat ate eaten;fall fell fallen;feed fed fed;feel felt felt;fight fought fought;find found found;flee fled fled;fly flew flown;forbid forbade forbidden;forget forgot forgotten;forgive forgave forgiven;freeze froze frozen;get got got/gotten;give gave given;go went gone;grind ground ground;grow grew grown;hang hung hung;have had had;hear heard heard;hide hid hidden;hit hit hit;hold held held;hurt hurt hurt;keep kept kept;kneel knelt knelt;know knew known;lay laid laid;lead led led;lean leant/leaned leant/leaned;leap leapt/leaped leapt/leaped;learn learnt/learned learnt/learned;leave left left;lend lent lent;let let let;lie lay lain;light lit lit;lose lost lost;make made made;mean meant meant;meet met met;mistake mistook mistaken;pay paid paid;put put put;quit quit quit;read read read;ride rode ridden;ring rang rung;rise rose risen;run ran run;say said said;see saw seen;seek sought sought;sell sold sold;send sent sent;set set set;sew sewed sewn;shake shook shaken;shine shone shone;shoot shot shot;show showed shown;shrink shrank shrunk;shut shut shut;sing sang sung;sink sank sunk;sit sat sat;sleep slept slept;slide slid slid;smell smelt/smelled smelt/smelled;speak spoke spoken;speed sped sped;spell spelt/spelled spelt/spelled;spend spent spent;spill spilt/spilled spilt/spilled;spin spun spun;split split split;spoil spoilt/spoiled spoilt/spoiled;spread spread spread;spring sprang sprung;stand stood stood;steal stole stolen;stick stuck stuck;sting stung stung;strike struck struck;swear swore sworn;sweep swept swept;swim swam swum;swing swung swung;take took taken;teach taught taught;tear tore torn;tell told told;think thought thought;throw threw thrown;understand understood understood;upset upset upset;wake woke woken;wear wore worn;weave wove woven;weep wept wept;win won won;wind wound wound;withdraw withdrew withdrawn;write wrote written';
+const IRR = new Map(IRR_SRC.split(';').map(s => { const [b, past, pp] = s.split(' '); return [b, { past, pp }]; }));
+const PREFIXES = ['under', 'over', 'with', 'fore', 'out', 'mis', 're', 'un'];
+const NOT_PREFIXED = new Set(['relay', 'rebind']);
+const DOUBLE = new Set(['admit', 'prefer', 'occur', 'refer', 'permit', 'control', 'regret', 'commit', 'submit', 'omit', 'transfer', 'equip', 'patrol', 'expel', 'compel', 'excel', 'begin', 'forget', 'forbid', 'upset', 'quiz']);
+const UK_US = new Set(['travel', 'cancel', 'label', 'quarrel', 'model', 'signal', 'level', 'dial', 'fuel', 'total', 'marvel']);
+const COMMON_VERBS = new Set('accept add agree allow answer arrive ask attend bake believe borrow brush call carry change chat check clean climb close collect complete cook copy count cover cross cry dance decide describe design destroy discover discuss drop enjoy enter explain explore fail fill finish fix follow guess hate help hope hurry imagine improve invent invite join jump kick knock laugh learn like listen live look love marry measure miss move need notice open order paint pass pick plant play practise practice prefer prepare press print promise protect pull push reach receive recycle relax remember repair repeat reply rest return save share shout smile solve spell start stay stop study talk taste thank touch train travel try turn use visit wait walk want wash watch work worry'.split(' '));
+const PARTICLES = new Set(['up', 'down', 'on', 'off', 'in', 'out', 'away', 'back', 'after', 'for', 'at', 'of', 'over', 'around', 'about', 'care', 'with', 'into']);
+const isCVC = v => v.length <= 5 && /^[^aeiou]*[aeiou][^aeiouwxy]$/.test(v);
+
+function irregular(v) {
+  if (IRR.has(v)) return IRR.get(v);
+  if (NOT_PREFIXED.has(v)) return null;
+  for (const p of PREFIXES) {
+    if (v.startsWith(p) && v.length - p.length >= 2) {
+      const r = IRR.get(v.slice(p.length));
+      if (r) return { past: r.past.split('/').map(x => p + x).join('/'), pp: r.pp.split('/').map(x => p + x).join('/') };
+    }
+  }
+  return null;
+}
+function regularPast(v) {
+  if (DOUBLE.has(v)) return v + v.slice(-1) + 'ed';
+  if (UK_US.has(v)) return `${v}${v.slice(-1)}ed/${v}ed`;
+  if (/e$/.test(v)) return v + 'd';
+  if (/[^aeiou]y$/.test(v)) return v.slice(0, -1) + 'ied';
+  if (/(panic|picnic|mimic)$/.test(v)) return v + 'ked';
+  if (isCVC(v)) return v + v.slice(-1) + 'ed';
+  return v + 'ed';
+}
+function ingForm(v) {
+  if (v === 'be') return 'being';
+  if (/ie$/.test(v)) return v.slice(0, -2) + 'ying';
+  if (DOUBLE.has(v)) return v + v.slice(-1) + 'ing';
+  if (UK_US.has(v)) return `${v}${v.slice(-1)}ing/${v}ing`;
+  if (/(ee|ye|oe)$/.test(v)) return v + 'ing';
+  if (/e$/.test(v)) return v.slice(0, -1) + 'ing';
+  if (/(panic|picnic|mimic)$/.test(v)) return v + 'king';
+  if (isCVC(v)) return v + v.slice(-1) + 'ing';
+  return v + 'ing';
+}
+function conjugate(phrase) {
+  const base = phrase.trim();
+  const parts = base.toLowerCase().split(/\s+/);
+  const v = parts[0];
+  const tail = parts.length > 1 ? ' ' + parts.slice(1).join(' ') : '';
+  const irr = irregular(v);
+  const withTail = s => s.split('/').map(x => x + tail).join('/');
+  const past = irr ? irr.past : regularPast(v);
+  const pp = irr ? irr.pp : regularPast(v);
+  return { base, past: withTail(past), pp: withTail(pp), ing: withTail(ingForm(v)), irregular: !!irr };
+}
+// Without a printed tag, call it a verb only when it is a known verb (or a known verb + particle, like "pick up")
+function guessPos(en) {
+  const ws = en.toLowerCase().split(/\s+/);
+  const known = IRR.has(ws[0]) || COMMON_VERBS.has(ws[0]);
+  if (ws.length === 1 && known) return 'verb';
+  if (ws.length <= 3 && known && PARTICLES.has(ws[1])) return 'verb';
+  return 'unknown';
+}
+
+/* ---------- word data ---------- */
+const POS = {
+  verb: { ar: 'فعل', cls: 'verb' },
+  noun: { ar: 'اسم', cls: 'noun' },
+  adjective: { ar: 'صفة', cls: 'adjective' },
+  adverb: { ar: 'ظرف', cls: 'adverb' },
+  preposition: { ar: 'حرف جر', cls: 'other' },
+  phrase: { ar: 'عبارة', cls: 'other' },
+  other: { ar: 'أخرى', cls: 'other' },
+  unknown: { ar: '', cls: 'other' },
+};
+const POS_OPTIONS = [['unknown', 'النوع؟'], ['verb', 'فعل'], ['noun', 'اسم'], ['adjective', 'صفة'], ['adverb', 'ظرف'], ['preposition', 'حرف جر'], ['phrase', 'عبارة'], ['other', 'أخرى']];
+const POS_ALIASES = { v: 'verb', verb: 'verb', n: 'noun', noun: 'noun', adj: 'adjective', adjective: 'adjective', adv: 'adverb', adverb: 'adverb', prep: 'preposition', preposition: 'preposition', phrase: 'phrase', other: 'other', unknown: 'unknown' };
+function normPos(pos, tag) {
+  let k = POS_ALIASES[String(pos || '').toLowerCase().trim()];
+  if (!k && tag) {
+    if (/\(v\)/i.test(tag)) k = 'verb';
+    else if (/\(n\)/i.test(tag)) k = 'noun';
+    else if (/\(adj\)/i.test(tag)) k = 'adjective';
+    else if (/\(adv\)/i.test(tag)) k = 'adverb';
+  }
+  return k || 'other';
+}
+function normWord(x) {
+  if (!x || typeof x !== 'object') return null;
+  const en = str(x.en, 80);
+  if (!en) return null;
+  const tag = str(x.tag, 30);
+  const pos = x.pos === 'auto' ? guessPos(en) : normPos(x.pos, tag);
+  const w = { en, tag, pos, ar: str(x.ar, 120), example: str(x.example, 160) };
+  if (pos === 'verb') {
+    const f = x.forms && typeof x.forms === 'object' ? x.forms : null;
+    const local = conjugate(en);
+    w.forms = f && str(f.past, 60)
+      ? {
+          base: str(f.base, 60) || en,
+          past: str(f.past, 60),
+          pp: str(f.pp, 60) || str(f.past, 60),
+          ing: str(f.ing, 60) || local.ing,
+          irregular: typeof f.irregular === 'boolean' ? f.irregular : local.irregular,
+        }
+      : local;
+  }
+  return w;
+}
+const normWords = list => Array.isArray(list) ? list.map(normWord).filter(Boolean) : [];
+
+/* ---------- reading text copied from Google Lens / Live Text ---------- */
+const TAG_ENTRY = /([A-Za-z][A-Za-z'\- ]*?)\s*((?:\(\s*(?:v|n|adj|adv|prep|d|ed|ied|pl)\s*\)\s*)+)([^A-Za-z(]*)/gi;
+const LATIN_RUN = /([A-Za-z][A-Za-z'\-]*(?:[ ]+[A-Za-z][A-Za-z'\-]*)*)([^A-Za-z]*)/g;
+const HEADER_WORDS = /\b(lesson|unit|page|pages|sb|wb|conjugation|vocabulary|exercise|workbook)\b/i;
+const AR_CHARS = /[؀-ۿ]/;
+const cleanAr = s => String(s || '').replace(/[^؀-ۿ\s\-–،]/g, ' ').replace(/\s+/g, ' ').replace(/^[\s\-–،]+|[\s\-–،]+$/g, '').slice(0, 120);
+const cleanEn = s => String(s || '').replace(/\s+/g, ' ').replace(/^[\s\-'.]+|[\s\-'.]+$/g, '').slice(0, 80);
+const normTags = tags => (tags.match(/\(\s*[a-z]+\s*\)/gi) || []).map(t => t.replace(/\s+/g, '').toLowerCase()).join(' ');
+function posFromTags(tags) {
+  const t = tags.toLowerCase();
+  if (/\(\s*(v|d|ed|ied)\s*\)/.test(t)) return 'verb';
+  if (/\(\s*adj\s*\)/.test(t)) return 'adjective';
+  if (/\(\s*adv\s*\)/.test(t)) return 'adverb';
+  if (/\(\s*prep\s*\)/.test(t)) return 'preposition';
+  if (/\(\s*(n|pl)\s*\)/.test(t)) return 'noun';
+  return 'unknown';
+}
+// A verb-table row such as "go went gone" or "be was were been"
+function verbTableRow(words) {
+  const w = words.map(x => x.toLowerCase());
+  if (w.length < 3 || w.length > 4) return null;
+  const irr = IRR.get(w[0]);
+  if (!irr) return null;
+  const pasts = irr.past.split('/');
+  const pps = irr.pp.split('/');
+  if (!pasts.includes(w[1]) || !(pps.includes(w[2]) || pasts.includes(w[2]))) return null;
+  return { base: w[0], past: irr.past, pp: irr.pp, ing: ingForm(w[0]), irregular: true };
+}
+function parseText(raw) {
+  const text = String(raw || '').replace(/\r/g, '').replace(/[’‘]/g, "'");
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const tagged = (text.match(/\(\s*(v|n|adj|adv)\s*\)/gi) || []).length >= 2;
+  const out = [];
+  const seen = new Set();
+  const add = w => {
+    const k = w.en.toLowerCase();
+    if (w.en.length < 2 || seen.has(k)) return null;
+    seen.add(k);
+    out.push(w);
+    return w;
+  };
+  const info = lines.map(line => {
+    const row = { entries: [], arOnly: AR_CHARS.test(line) && !/[A-Za-z]/.test(line) };
+    if (row.arOnly) return row;
+    let m;
+    if (tagged) {
+      TAG_ENTRY.lastIndex = 0;
+      while ((m = TAG_ENTRY.exec(line))) {
+        const en = cleanEn(m[1]);
+        if (!en) continue;
+        const w = add({ en, tag: normTags(m[2]), pos: posFromTags(m[2]), ar: cleanAr(m[3]) });
+        if (w) row.entries.push(w);
+      }
+      return row;
+    }
+    const runs = [];
+    LATIN_RUN.lastIndex = 0;
+    while ((m = LATIN_RUN.exec(line))) runs.push({ en: cleanEn(m[1]), after: m[2] });
+    const vt = verbTableRow(runs.flatMap(r => r.en.split(' ')));
+    if (vt) {
+      const w = add({ en: vt.base, tag: '', pos: 'verb', ar: cleanAr(runs.map(r => r.after).join(' ')), forms: vt });
+      if (w) row.entries.push(w);
+      return row;
+    }
+    if (/\d/.test(line) && HEADER_WORDS.test(line)) return row;
+    for (const r of runs) {
+      if (!r.en || r.en.split(' ').length > 4 || HEADER_WORDS.test(r.en)) continue;
+      const w = add({ en: r.en, tag: '', pos: guessPos(r.en), ar: cleanAr(r.after) });
+      if (w) row.entries.push(w);
+    }
+    return row;
+  });
+  // Lens may copy the Arabic meanings on their own lines: one after each word, or a whole column of words and then a
+  // whole column of meanings. Pair a block of English lines with the neighbouring block of Arabic lines, in order, only
+  // when both hold the same number of items; otherwise leave the meanings empty rather than guess.
+  const blocks = [];
+  info.forEach((r, i) => {
+    const type = r.arOnly ? 'ar' : r.entries.length ? 'en' : 'other';
+    const last = blocks[blocks.length - 1];
+    if (last && last.type === type) last.items.push(i); else blocks.push({ type, items: [i] });
+  });
+  const pairBlocks = arFirst => {
+    const res = [];
+    const used = new Set();
+    for (let b = 1; b < blocks.length; b++) {
+      const enB = arFirst ? blocks[b] : blocks[b - 1];
+      const arB = arFirst ? blocks[b - 1] : blocks[b];
+      if (enB.type !== 'en' || arB.type !== 'ar' || used.has(enB) || used.has(arB)) continue;
+      const words = enB.items.flatMap(i => info[i].entries);
+      if (words.length !== arB.items.length || words.some(w => w.ar)) continue;
+      used.add(enB);
+      used.add(arB);
+      words.forEach((w, k) => res.push([w, cleanAr(lines[arB.items[k]])]));
+    }
+    return res;
+  };
+  const enThenAr = pairBlocks(false);
+  const arThenEn = pairBlocks(true);
+  (arThenEn.length > enThenAr.length ? arThenEn : enThenAr).forEach(([w, ar]) => { w.ar = ar; });
+  const t = text.match(/\b(lesson|unit)\s*(\d+)/i);
+  const title = t ? `${t[1][0].toUpperCase()}${t[1].slice(1).toLowerCase()} ${t[2]}` : '';
+  return { title, words: normWords(out.slice(0, 200)) };
+}
+
+const SAMPLE = {
+  id: 'sample',
+  sample: true,
+  title: 'Lesson 2',
+  createdAt: 0,
+  words: normWords([
+    ['notice', '(d) (v)', 'verb', 'يلاحظ', 'Did you notice the new sign?'],
+    ['cans', '(n)', 'noun', 'علب من المعدن', 'We put the cans in the recycling bin.'],
+    ['meeting', '(n)', 'noun', 'لقاء - اجتماع', 'The club has a meeting on Monday.'],
+    ['member', '(n)', 'noun', 'عضو في فريق', 'She is a member of the team.'],
+    ['young people', '(n)', 'noun', 'الشباب', 'Young people love sports.'],
+    ['solve', '(d) (v)', 'verb', 'يحل', 'Can you solve this problem?'],
+    ['project', '(n)', 'noun', 'مشروع', 'Our class has a new project.'],
+    ['leader', '(n)', 'noun', 'قائد', 'Omar is the team leader.'],
+    ['collect', '(ed) (v)', 'verb', 'يجمع', 'We collect litter in the park.'],
+    ['litter', '(n)', 'noun', 'قمامة', 'Put the litter in the bin.'],
+    ['positive', '(adj)', 'adjective', 'إيجابي', 'Be positive and try again.'],
+    ['surprised', '(adj)', 'adjective', 'مندهش', 'I was surprised by the gift.'],
+    ['repeat', '(ed) (v)', 'verb', 'يكرر', 'Please repeat after me.'],
+    ['alphabet', '(n)', 'noun', 'الحروف الأبجدية', 'The English alphabet has 26 letters.'],
+    ['especially', '(adv)', 'adverb', 'خاصةً - على وجه الخصوص', 'I like fruit, especially apples.'],
+    ['check', '(ed) (v)', 'verb', 'يختبر - يفحص', 'Check your answers, please.'],
+    ['chocolate bar', '(n)', 'noun', 'قالب شيكولاتة', 'He ate a chocolate bar.'],
+    ['new', '(adj)', 'adjective', 'جديد', 'I have a new school bag.'],
+  ].map(([en, tag, pos, ar, example]) => ({ en, tag, pos, ar, example }))),
+};
+
+/* ---------- state ---------- */
+function loadProfile() {
+  const p = LS.get('sw-profile', null);
+  if (!p || typeof p !== 'object') return null;
+  const name = str(p.name, 30);
+  const gender = p.gender === 'girl' ? 'girl' : p.gender === 'boy' ? 'boy' : '';
+  return name && gender ? { name, gender } : null;
+}
+const state = {
+  profile: loadProfile(),
+  rate: LS.get('sw-rate', 1),
+  accent: LS.get('sw-accent', 'en-US'),
+  lessons: [],
+  currentId: 'sample',
+  filter: 'all',
+  editing: false,
+  confirmDelete: false,
+  playing: false,
+};
+const allLessons = () => [...state.lessons, SAMPLE];
+const current = () => allLessons().find(l => l.id === state.currentId) || SAMPLE;
+const isEditing = () => state.editing && !current().sample;
+
+/* ---------- talking to a boy or a girl ---------- */
+const g = (boy, girl) => state.profile && state.profile.gender === 'girl' ? girl : boy;
+const T = {
+  helloSub: ['جاهز نتعلم كلمات جديدة؟', 'جاهزة نتعلم كلمات جديدة؟'],
+  enterBtn: ['ابدأ', 'ابدئي'],
+  scanTitle: ['صوّر صفحة الكلمات', 'صوّري صفحة الكلمات'],
+  scanIntro: ['مجانًا وبدون اشتراك: اقرأ نص الصفحة بـ Google Lens والصقه هنا. يستخرج التطبيق الكلمات الإنجليزية، ويوضّح الأفعال وتصريفاتها، وتسمع نطق كل كلمة بالسرعة التي تناسبك.',
+              'مجانًا وبدون اشتراك: اقرئي نص الصفحة بـ Google Lens والصقيه هنا. يستخرج التطبيق الكلمات الإنجليزية، ويوضّح الأفعال وتصريفاتها، وتسمعين نطق كل كلمة بالسرعة التي تناسبكِ.'],
+  step1Title: ['صوّر الصفحة بـ Google Lens', 'صوّري الصفحة بـ Google Lens'],
+  step1Text: ['افتح تطبيق Google واضغط أيقونة الكاميرا، صوّر جدول الكلمات، ثم اضغط «اختيار الكل» أو حدّد النص، واضغط «نسخ».',
+              'افتحي تطبيق Google واضغطي أيقونة الكاميرا، صوّري جدول الكلمات، ثم اضغطي «اختيار الكل» أو حدّدي النص، واضغطي «نسخ».'],
+  step2Title: ['الصق النص هنا', 'الصقي النص هنا'],
+  step2Text: ['اضغط ضغطة طويلة داخل المربع واختر «لصق». على الآيفون يمكنك أيضًا اختيار «مسح النص ضوئيًا» من نفس القائمة.',
+              'اضغطي ضغطة طويلة داخل المربع واختاري «لصق». على الآيفون يمكنكِ أيضًا اختيار «مسح النص ضوئيًا» من نفس القائمة.'],
+  parseBtn: ['استخرج الكلمات', 'استخرجي الكلمات'],
+  altText: ['أو صوّر الصفحة هنا مباشرة، وClaude يقرأ الكلمات مع معانيها العربية وجمل أمثلة. هذه الطريقة تستهلك من رصيد حسابك في Claude.',
+            'أو صوّري الصفحة هنا مباشرة، وClaude يقرأ الكلمات مع معانيها العربية وجمل أمثلة. هذه الطريقة تستهلك من رصيد حسابكِ في Claude.'],
+  camBtn: ['صوّر بالكاميرا', 'صوّري بالكاميرا'],
+  galBtn: ['اختر صورة', 'اختاري صورة'],
+  manual: ['أو اكتب كلمات الدرس بنفسك', 'أو اكتبي كلمات الدرس بنفسكِ'],
+  addTitle: ['أضف كلمة إلى هذا الدرس', 'أضيفي كلمة إلى هذا الدرس'],
+  addBtn: ['أضف الكلمة', 'أضيفي الكلمة'],
+};
+function applyGender() {
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const v = T[el.dataset.t];
+    if (v) el.textContent = g(v[0], v[1]);
+  });
+}
+
+/* ---------- storage: private per-viewer db rows, with this-device fallback ---------- */
+const LS_LESSONS = 'sw-lessons-v1';
+const strip = l => ({ title: l.title, createdAt: l.createdAt, updatedAt: l.updatedAt || l.createdAt, words: l.words });
+const sortLessons = arr => arr.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+const chains = new Map();
+function queue(id, fn) {
+  const p = (chains.get(id) || Promise.resolve()).then(fn, fn);
+  chains.set(id, p.catch(() => {}));
+  return p;
+}
+const store = {
+  mode: 'local',
+  col: null,
+  async init() {
+    try {
+      const [db, user] = await Promise.all([use('db'), use('user')]);
+      if (!db || !user) return;
+      const uid = await user.id();
+      if (!uid) return;
+      this.col = db.collection('data/users/' + uid);
+      this.mode = 'db';
+    } catch { this.mode = 'local'; }
+  },
+  async load() {
+    const local = LS.get(LS_LESSONS, []);
+    if (this.mode === 'db') {
+      try {
+        const snap = await this.col.orderBy('createdAt', 'desc').limit(300).get();
+        const out = snap.docs.filter(d => d.exists).map(d => ({ ...d.data(), id: d.id }));
+        if (Array.isArray(local) && local.length) {
+          for (const l of local) {
+            if (l && l.id && !out.some(o => o.id === l.id)) { await this.col.doc(l.id).set(strip(l)); out.push(l); }
+          }
+          LS.set(LS_LESSONS, []);
+        }
+        return clean(out);
+      } catch { this.mode = 'local'; }
+    }
+    return clean(Array.isArray(local) ? local : []);
+    function clean(arr) {
+      return sortLessons(arr.filter(l => l && l.id).map(l => ({ id: String(l.id), title: str(l.title, 80) || 'درس', createdAt: Number(l.createdAt) || 0, updatedAt: Number(l.updatedAt) || 0, words: normWords(l.words) })));
+    }
+  },
+  writeLocal() { LS.set(LS_LESSONS, state.lessons.map(l => ({ id: l.id, ...strip(l) }))); },
+  save(lesson) {
+    lesson.updatedAt = Date.now();
+    return queue(lesson.id, async () => {
+      if (this.mode === 'db') {
+        try { await this.col.doc(lesson.id).set(JSON.parse(JSON.stringify(strip(lesson)))); return; }
+        catch { this.mode = 'local'; toast('تعذّر الحفظ في الحساب، فحُفظ الدرس على هذا الجهاز فقط.'); }
+      }
+      this.writeLocal();
+    });
+  },
+  remove(id) {
+    return queue(id, async () => {
+      if (this.mode === 'db') {
+        try { await this.col.doc(id).delete(); return; }
+        catch { this.mode = 'local'; }
+      }
+      this.writeLocal();
+    });
+  },
+};
+
+/* ---------- speech ---------- */
+const tts = {
+  ok: 'speechSynthesis' in window && typeof window.SpeechSynthesisUtterance === 'function',
+  voices: [],
+  live: new Set(),
+  load() { if (this.ok) { try { this.voices = speechSynthesis.getVoices() || []; } catch { this.voices = []; } } },
+  voice(lang) {
+    const norm = l => String(l || '').replace('_', '-').toLowerCase();
+    const vs = this.voices;
+    if (!vs.length) return null;
+    if (lang === 'ar') return vs.find(v => norm(v.lang).startsWith('ar-eg')) || vs.find(v => norm(v.lang).startsWith('ar')) || null;
+    const want = lang.toLowerCase();
+    const exact = vs.filter(v => norm(v.lang) === want);
+    return exact.find(v => /google|natural|enhanced|premium|samantha|daniel|aria|jenny|sonia|libby/i.test(v.name)) || exact[0]
+      || vs.find(v => norm(v.lang).startsWith('en')) || null;
+  },
+  stop() { if (this.ok) try { speechSynthesis.cancel(); } catch {} },
+  speak(text, { lang = state.accent, rate = state.rate } = {}) {
+    return new Promise(resolve => {
+      if (!this.ok || !text) { resolve(false); return; }
+      const spoken = String(text).replace(/\s*\/\s*/g, ', ');
+      const u = new SpeechSynthesisUtterance(spoken);
+      const v = this.voice(lang);
+      if (v) u.voice = v;
+      u.lang = v ? v.lang : (lang === 'ar' ? 'ar-EG' : lang);
+      u.rate = rate;
+      this.live.add(u);
+      let done = false;
+      const timer = setTimeout(() => finish(), 1800 + spoken.length * 190 / rate);
+      function finish() { if (done) return; done = true; clearTimeout(timer); tts.live.delete(u); resolve(true); }
+      u.onend = finish;
+      u.onerror = finish;
+      const go = () => { try { speechSynthesis.speak(u); } catch { finish(); } };
+      let busy = false;
+      try { busy = speechSynthesis.speaking || speechSynthesis.pending; } catch {}
+      if (busy) { this.stop(); setTimeout(go, 60); } else go();
+    });
+  },
+};
+if (tts.ok) {
+  tts.load();
+  try { speechSynthesis.onvoiceschanged = () => tts.load(); } catch {}
+}
+const noSpeechMsg = () => g('هذا المتصفح لا يدعم النطق الصوتي. جرّب Chrome أو Safari.', 'هذا المتصفح لا يدعم النطق الصوتي. جرّبي Chrome أو Safari.');
+
+let speakingEl = null;
+async function sayFrom(el, text) {
+  if (!tts.ok) { toast(noSpeechMsg()); return; }
+  if (state.playing) stopPlay();
+  if (speakingEl) speakingEl.classList.remove('speaking');
+  speakingEl = el;
+  el.classList.add('speaking');
+  await tts.speak(text);
+  if (speakingEl === el) { el.classList.remove('speaking'); speakingEl = null; }
+}
+
+let playToken = 0;
+function stopPlay() {
+  playToken++;
+  state.playing = false;
+  tts.stop();
+  document.querySelectorAll('.word.now').forEach(li => li.classList.remove('now'));
+  document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
+  updatePlayButton();
+}
+async function playAll() {
+  if (state.playing) { stopPlay(); return; }
+  if (!tts.ok) { toast(noSpeechMsg()); return; }
+  const items = visibleWords();
+  if (!items.length) return;
+  const token = ++playToken;
+  state.playing = true;
+  updatePlayButton();
+  const arabic = !!tts.voice('ar');
+  for (const { w, i } of items) {
+    if (token !== playToken) return;
+    const li = document.querySelector(`.word[data-i="${i}"]`);
+    document.querySelectorAll('.word.now').forEach(x => x.classList.remove('now'));
+    if (li) {
+      li.classList.add('now');
+      li.scrollIntoView({ block: 'nearest', behavior: reducedMotion() ? 'auto' : 'smooth' });
+    }
+    await tts.speak(w.en);
+    if (token !== playToken) return;
+    if (arabic && w.ar) {
+      await wait(300);
+      if (token !== playToken) return;
+      await tts.speak(w.ar, { lang: 'ar', rate: Math.min(state.rate, 1) });
+    }
+    if (token !== playToken) return;
+    await wait(650);
+  }
+  if (token === playToken) stopPlay();
+}
+function updatePlayButton() {
+  const b = $('#play-all');
+  if (!b) return;
+  b.innerHTML = state.playing ? `${ICON.stop} إيقاف` : `${ICON.play} ${g('اسمع الكل', 'اسمعي الكل')}`;
+  b.setAttribute('aria-pressed', String(state.playing));
+}
+
+/* ---------- welcome ---------- */
+function renderProfile() {
+  document.querySelectorAll('[data-avatar]').forEach(el => { el.innerHTML = AVATAR[el.dataset.avatar]; });
+  const p = state.profile;
+  const kind = p ? p.gender : 'boy';
+  $('#me-avatar').innerHTML = AVATAR[kind];
+  $('#hello-avatar').innerHTML = AVATAR[kind];
+  $('#hello-name').textContent = p ? p.name : '';
+  const line = $('#hello-line');
+  line.textContent = p ? `مرحبًا يا ${p.name}` : '';
+  line.hidden = !p;
+  applyGender();
+}
+function showWelcomeForm() {
+  const p = state.profile;
+  $('#student-name').value = p ? p.name : '';
+  document.querySelectorAll('input[name="gender"]').forEach(r => { r.checked = !!p && r.value === p.gender; });
+  $('#welcome-err').hidden = true;
+  $('#welcome-hello').hidden = true;
+  $('#welcome-form').hidden = false;
+  $('#app').hidden = true;
+  $('#welcome').hidden = false;
+  if (state.playing) stopPlay();
+  window.scrollTo(0, 0);
+}
+function showHello() {
+  $('#welcome-form').hidden = true;
+  $('#welcome-hello').hidden = false;
+  $('#app').hidden = true;
+  $('#welcome').hidden = false;
+  window.scrollTo(0, 0);
+}
+function enterApp() {
+  $('#welcome').hidden = true;
+  $('#app').hidden = false;
+  window.scrollTo(0, 0);
+}
+$('#welcome-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = str($('#student-name').value, 30);
+  const picked = document.querySelector('input[name="gender"]:checked');
+  const err = $('#welcome-err');
+  if (!name) { err.textContent = 'الاسم مطلوب.'; err.hidden = false; $('#student-name').focus(); return; }
+  if (!picked) { err.textContent = 'اختيار «ولد» أو «بنت» مطلوب.'; err.hidden = false; return; }
+  state.profile = { name, gender: picked.value };
+  LS.set('sw-profile', state.profile);
+  renderProfile();
+  render();
+  showHello();
+  if (tts.ok && tts.voice('ar')) tts.speak(`مرحبًا يا ${name}`, { lang: 'ar', rate: 1 });
+});
+
+/* ---------- rendering ---------- */
+const FILTERS = [['all', 'الكل'], ['verb', 'أفعال'], ['noun', 'أسماء'], ['adjective', 'صفات'], ['rest', 'أخرى']];
+const matches = (w, f) => f === 'all' || (f === 'rest' ? !['verb', 'noun', 'adjective'].includes(w.pos) : w.pos === f);
+function visibleWords() {
+  return current().words.map((w, i) => ({ w, i })).filter(({ w }) => matches(w, state.filter));
+}
+
+function renderSpeed() {
+  document.querySelectorAll('#speed button').forEach(b => b.setAttribute('aria-checked', String(Number(b.dataset.rate) === state.rate)));
+}
+
+function renderNav() {
+  const nav = $('#lessons');
+  nav.innerHTML = allLessons().map(l => `
+    <button type="button" class="chip" data-action="open" data-id="${esc(l.id)}" aria-pressed="${l.id === current().id}">
+      <span dir="auto">${esc(l.title)}</span><small>${l.words.length}</small>${l.sample ? '<em>مثال</em>' : ''}
+    </button>`).join('');
+}
+
+function markSuffix(base, form) {
+  const b = base.toLowerCase();
+  let k = 0;
+  while (k < b.length && k < form.length && b[k] === form[k].toLowerCase()) k++;
+  if (k === 0 || form.includes('/')) return esc(form);
+  return esc(form.slice(0, k)) + (k < form.length ? `<mark>${esc(form.slice(k))}</mark>` : '');
+}
+function formsHTML(f) {
+  const cells = [
+    ['المصدر', f.base, false],
+    ['الماضي', f.past, !f.irregular],
+    ['التصريف الثالث', f.pp, !f.irregular],
+    ['+ing', f.ing, true],
+  ];
+  return `<div class="forms">
+    ${cells.map(([label, val, mark]) => `<button type="button" class="form" data-action="say" data-text="${esc(val)}" aria-label="${esc(label)}: ${esc(val)}"><small dir="auto">${label}</small><b>${mark ? markSuffix(f.base, val) : esc(val)}</b></button>`).join('')}
+  </div>`;
+}
+function rowHTML(w, i, editing) {
+  const pos = POS[w.pos] || POS.other;
+  const isVerb = w.pos === 'verb';
+  const posCell = editing
+    ? `<select class="pos-in" data-edit="pos" data-i="${i}" aria-label="نوع ${esc(w.en)}" dir="rtl">${POS_OPTIONS.map(([k, l]) => `<option value="${k}"${w.pos === k ? ' selected' : ''}>${l}</option>`).join('')}</select>`
+    : (pos.ar ? `<span class="pos pos-${pos.cls}" dir="rtl">${pos.ar}</span>` : '');
+  const arCell = editing
+    ? `<input class="ar-in" dir="rtl" lang="ar" data-edit="ar" data-i="${i}" value="${esc(w.ar)}" placeholder="المعنى" maxlength="120" aria-label="معنى ${esc(w.en)}">`
+    : `<div class="ar" dir="rtl" lang="ar">${esc(w.ar)}</div>`;
+  return `<li class="word${isVerb ? ' is-verb' : ''}" data-i="${i}">
+    <button type="button" class="say" data-action="say" data-text="${esc(w.en)}" aria-label="استمع إلى ${esc(w.en)}">${ICON.speaker}</button>
+    <div class="w-head">
+      <span class="en" lang="en">${esc(w.en)}</span>
+      ${w.tag ? `<span class="tag">${esc(w.tag)}</span>` : ''}
+      ${posCell}
+      ${isVerb && w.forms ? `<span class="kind ${w.forms.irregular ? 'irr' : 'reg'}" dir="rtl">${w.forms.irregular ? 'شاذ' : 'منتظم'}</span>` : ''}
+    </div>
+    ${arCell}
+    ${editing ? `<button type="button" class="del" data-action="del-word" data-i="${i}" aria-label="احذف ${esc(w.en)}">${ICON.x}</button>` : ''}
+    ${isVerb && w.forms ? formsHTML(w.forms) : ''}
+    ${w.example ? `<p class="ex" lang="en"><button type="button" class="say-sm" data-action="say" data-text="${esc(w.example)}" aria-label="استمع إلى الجملة">${ICON.play}</button><span>${esc(w.example)}</span></p>` : ''}
+  </li>`;
+}
+
+function renderLesson() {
+  const L = current();
+  const n = L.words.length;
+  const verbs = L.words.filter(w => w.pos === 'verb').length;
+  const counts = Object.fromEntries(FILTERS.map(([k]) => [k, L.words.filter(w => matches(w, k)).length]));
+  if (state.filter !== 'all' && !counts[state.filter]) state.filter = 'all';
+  const editing = isEditing();
+
+  $('#lesson-head').innerHTML = `
+    <div class="lh">
+      <div class="lh-top">
+        ${editing
+          ? `<input class="title-input" id="title-input" dir="auto" value="${esc(L.title)}" maxlength="80" aria-label="اسم الدرس">`
+          : `<h2 class="lesson-title" dir="auto">${esc(L.title)}</h2>`}
+        <span class="meta">${countWords(n)} · ${countVerbs(verbs)}</span>
+        <span class="spacer"></span>
+        ${L.sample ? '' : editing
+          ? `<button type="button" class="btn small danger" data-action="del-lesson">${state.confirmDelete ? g('اضغط مرة أخرى للحذف', 'اضغطي مرة أخرى للحذف') : g('احذف الدرس', 'احذفي الدرس')}</button>
+             <button type="button" class="btn small primary" data-action="edit">${ICON.check} تم</button>`
+          : `<button type="button" class="btn small" data-action="edit">${ICON.pencil} تعديل</button>`}
+      </div>
+      ${L.sample ? `<div class="sample-note"><span>${g('هذا مثال من صفحة Lesson 2. الصق نص صفحة درسك بالأعلى ليُضاف هنا ويُحفظ.', 'هذا مثال من صفحة Lesson 2. الصقي نص صفحة درسكِ بالأعلى ليُضاف هنا ويُحفظ.')}</span><button type="button" class="btn small" data-action="save-sample">${ICON.save} ${g('احفظه في دروسي', 'احفظيه في دروسي')}</button></div>` : ''}
+      ${editing ? `<p class="note">${g('صحّح نوع الكلمة أو اكتب معناها، أو احذف ما لا تحتاجه. يُحفظ كل تغيير تلقائيًا.', 'صحّحي نوع الكلمة أو اكتبي معناها، أو احذفي ما لا تحتاجينه. يُحفظ كل تغيير تلقائيًا.')}</p>` : ''}
+      ${n ? `<div class="toolbar">
+        <button type="button" class="btn small primary" id="play-all" data-action="play-all" aria-pressed="false">${ICON.play} ${g('اسمع الكل', 'اسمعي الكل')}</button>
+        <label class="accent-pick">النطق
+          <select id="accent">
+            <option value="en-US"${state.accent === 'en-US' ? ' selected' : ''}>أمريكي</option>
+            <option value="en-GB"${state.accent === 'en-GB' ? ' selected' : ''}>بريطاني</option>
+          </select>
+        </label>
+      </div>
+      <div class="filters" role="group" aria-label="نوع الكلمات">
+        ${FILTERS.filter(([k]) => k === 'all' || counts[k]).map(([k, label]) => `<button type="button" class="filter" data-action="filter" data-f="${k}" aria-pressed="${state.filter === k}">${label}<small>${counts[k]}</small></button>`).join('')}
+      </div>` : ''}
+      ${tts.ok ? '' : `<p class="note">${g('هذا المتصفح لا يدعم النطق الصوتي. افتح التطبيق من Chrome أو Safari لسماع الكلمات.', 'هذا المتصفح لا يدعم النطق الصوتي. افتحي التطبيق من Chrome أو Safari لسماع الكلمات.')}</p>`}
+    </div>`;
+
+  $('#sheet').classList.toggle('editing', editing);
+  const list = visibleWords();
+  $('#words').innerHTML = list.length
+    ? list.map(({ w, i }) => rowHTML(w, i, editing)).join('')
+    : `<li class="empty" dir="rtl">${n ? 'لا توجد كلمات من هذا النوع في الدرس.' : g('الدرس فارغ. أضف أول كلمة من الخانات بالأسفل.', 'الدرس فارغ. أضيفي أول كلمة من الخانات بالأسفل.')}</li>`;
+  $('#add-form').hidden = !editing;
+  updatePlayButton();
+}
+
+function render() { renderNav(); renderLesson(); }
+
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.hidden = true; }, 3800);
+}
+function showNote(msg, isErr) {
+  const n = $('#scan-note');
+  n.textContent = msg;
+  n.classList.toggle('err', !!isErr);
+  n.hidden = !msg;
+}
+
+/* ---------- lesson actions ---------- */
+function openLesson(id) {
+  if (state.playing) stopPlay();
+  state.currentId = id;
+  state.filter = 'all';
+  state.editing = false;
+  state.confirmDelete = false;
+  LS.set('sw-current', id);
+  render();
+}
+const newId = () => 'l' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const todayTitle = () => 'درس ' + new Date().toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' });
+async function addLesson(lesson, { edit = false } = {}) {
+  state.lessons.unshift(lesson);
+  openLesson(lesson.id);
+  if (edit) { state.editing = true; renderLesson(); }
+  await store.save(lesson);
+}
+function goToLesson() {
+  $('#lesson').scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
+}
+
+function parsePasted() {
+  const box = $('#paste-box');
+  const raw = box.value;
+  if (!raw.trim()) {
+    showNote(g('الصق النص المنسوخ من Google Lens في المربع أولًا.', 'الصقي النص المنسوخ من Google Lens في المربع أولًا.'), true);
+    box.focus();
+    return;
+  }
+  const { title, words } = parseText(raw);
+  if (!words.length) {
+    showNote(g('لم نجد كلمات إنجليزية في هذا النص. تأكد أنك نسخت نص صفحة الكلمات نفسها.', 'لم نجد كلمات إنجليزية في هذا النص. تأكدي أنكِ نسختِ نص صفحة الكلمات نفسها.'), true);
+    return;
+  }
+  showNote('', false);
+  addLesson({ id: newId(), title: title || todayTitle(), createdAt: Date.now(), words });
+  box.value = '';
+  toast(`تمت إضافة ${countWords(words.length)}. ${g('راجعها واضغط «تعديل» لتصحيح أي كلمة.', 'راجعيها واضغطي «تعديل» لتصحيح أي كلمة.')}`);
+  goToLesson();
+}
+
+/* ---------- optional: reading the photo with Claude (uses the viewer's Claude usage) ---------- */
+const PROMPT = `This photo shows a vocabulary page from an English textbook used by Arabic-speaking school students in Egypt. Vocabulary entries usually look like: an English word or phrase, a part-of-speech tag such as (n), (v), (adj), (adv), sometimes a past-tense hint such as (d) or (ed), and the Arabic meaning beside it.
+
+Task: extract EVERY vocabulary entry visible in the photo, in reading order (finish one column top to bottom before the next). Ignore headings, page numbers, instructions, logos, watermarks, video captions and anything that is not a vocabulary entry. If the page includes a verb table (base / past / past participle), add each of those verbs once as a verb entry.
+
+For each entry give:
+- "en": the English word or phrase exactly as printed, lowercase unless it is a proper noun, without the tags.
+- "tag": the tags printed after it, e.g. "(d) (v)" or "(n)"; "" if none.
+- "pos": one of "verb", "noun", "adjective", "adverb", "preposition", "phrase", "other". Follow the printed tag when there is one.
+- "ar": the Arabic meaning exactly as printed. If no Arabic meaning is printed, write a short correct Arabic meaning suitable for school students.
+- "example": one short, simple English sentence (at most 9 words) using the word, suitable for a primary school student.
+- "forms": only for verbs, otherwise null: {"base": "...", "past": "...", "pp": "...", "ing": "...", "irregular": true or false}. For phrasal verbs conjugate the verb part (e.g. "took care of"). If two past forms are common, write both like "learnt/learned".
+
+Also give "title": the lesson or unit title printed on the page (e.g. "Lesson 2"), or "" if none is visible.
+
+Reply with only JSON in this exact shape:
+{"title":"Unit 1 - Lesson 3","words":[{"en":"visit","tag":"(ed) (v)","pos":"verb","ar":"يزور","example":"We visit our grandma on Friday.","forms":{"base":"visit","past":"visited","pp":"visited","ing":"visiting","irregular":false}},{"en":"garden","tag":"(n)","pos":"noun","ar":"حديقة","example":"There are flowers in the garden.","forms":null}]}
+If the photo has no vocabulary entries, reply {"title":"","words":[]}.`;
+
+const lensHint = () => g('استخدم Google Lens وانسخ النص والصقه بالأعلى بدلًا من ذلك.', 'استخدمي Google Lens وانسخي النص والصقيه بالأعلى بدلًا من ذلك.');
+function scanError(code) {
+  const tryOther = g('جرّب صورة أخرى', 'جرّبي صورة أخرى');
+  const msgs = {
+    not_granted: 'لم يتم السماح باستخدام Claude لقراءة الصور. ' + lensHint(),
+    sampling_disabled: 'قراءة الصور عبر Claude غير متاحة لهذا الحساب. ' + lensHint(),
+    not_declared: 'قراءة الصور عبر Claude غير متاحة الآن. ' + lensHint(),
+    capability_disabled: 'قراءة الصور عبر Claude غير متاحة في هذه النافذة. ' + lensHint(),
+    capability_removed: 'قراءة الصور عبر Claude تحتاج إصدارًا أحدث من التطبيق. ' + lensHint(),
+    images_unavailable: 'إرسال الصور إلى Claude غير متاح هنا. ' + lensHint(),
+    rate_limited: 'تم الوصول إلى حد الاستخدام في Claude حاليًا. ' + lensHint(),
+    session_expired: g('انتهت جلسة الدخول. سجّل الدخول إلى claude.ai ثم جرّب مرة أخرى.', 'انتهت جلسة الدخول. سجّلي الدخول إلى claude.ai ثم جرّبي مرة أخرى.'),
+    image_rejected: `لم نتمكن من استخدام هذه الصورة. ${tryOther} بصيغة JPG أو PNG.`,
+    invalid_json: `لم نتمكن من قراءة الكلمات من الصورة. ${tryOther} أوضح وأقرب لجدول الكلمات.`,
+    empty_completion: `لم نتمكن من قراءة الكلمات من الصورة. ${tryOther} أوضح وأقرب لجدول الكلمات.`,
+    refused: `لم نتمكن من قراءة هذه الصورة. ${tryOther} لصفحة الكلمات.`,
+    upstream_error: g('انقطع الاتصال أثناء القراءة. جرّب مرة أخرى.', 'انقطع الاتصال أثناء القراءة. جرّبي مرة أخرى.'),
+  };
+  return msgs[code] || msgs.upstream_error;
+}
+const PERMANENT = new Set(['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed', 'images_unavailable']);
+
+const samplePromise = use('sample');
+let scanCtl = null;
+let claudeOff = false;
+
+function claudeUnavailable(msg) {
+  claudeOff = true;
+  $('#claude-scan').hidden = true;
+  if (msg) showNote(msg, true);
+}
+async function checkScanAvailable() {
+  const s = await samplePromise;
+  if (!s) { claudeUnavailable(''); return null; }
+  const lim = await s.limits().catch(() => null);
+  if (!lim || !lim.images) { claudeUnavailable(''); return null; }
+  if (!claudeOff) $('#claude-scan').hidden = false;
+  return { s, img: lim.images };
+}
+
+async function prepareImage(file) {
+  const MAX = 2000;
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((resolve, reject) => {
+      const el = new Image();
+      el.onload = () => resolve(el);
+      el.onerror = () => reject(new Error('decode'));
+      el.src = url;
+    });
+    const w = img.naturalWidth, h = img.naturalHeight;
+    const k = Math.min(1, MAX / Math.max(w, h));
+    const c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(w * k));
+    c.height = Math.max(1, Math.round(h * k));
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    return await new Promise((resolve, reject) => c.toBlob(b => b ? resolve(b) : reject(new Error('encode')), 'image/jpeg', 0.9));
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+async function scan(file) {
+  if (!file || scanCtl) return;
+  showNote('', false);
+  const avail = claudeOff ? null : await checkScanAvailable();
+  if (!avail) { showNote('قراءة الصور عبر Claude غير متاحة هنا. ' + lensHint(), true); return; }
+  const { s, img: limits } = avail;
+  const usable = (limits.mediaTypes || []).includes(file.type) && file.size <= (limits.maxInputBytes || 0);
+  let blob;
+  try { blob = usable ? file : await prepareImage(file); }
+  catch { showNote(`لم نتمكن من فتح هذه الصورة. ${g('جرّب صورة أخرى', 'جرّبي صورة أخرى')} بصيغة JPG أو PNG.`, true); return; }
+
+  const status = $('#status');
+  const url = URL.createObjectURL(blob);
+  $('#status-img').src = url;
+  $('#status-title').textContent = 'جاري قراءة الصفحة…';
+  $('#status-sub').textContent = 'قد يستغرق ذلك حتى دقيقة.';
+  status.hidden = false;
+  $('#scan-actions').hidden = true;
+
+  scanCtl = new AbortController();
+  let found = 0;
+  try {
+    const data = await s.json(PROMPT, {
+      images: blob,
+      signal: scanCtl.signal,
+      onText: ({ text }) => {
+        const k = (text.match(/"en"\s*:/g) || []).length;
+        if (k !== found) {
+          found = k;
+          $('#status-title').textContent = 'نكتب الكلمات…';
+          $('#status-sub').textContent = `وجدنا ${countWords(k)} حتى الآن.`;
+        }
+      },
+    });
+    const words = normWords(data && data.words);
+    if (!words.length) {
+      showNote(g('لم نجد كلمات في هذه الصورة. صوّر جدول الكلمات عن قرب وبإضاءة جيدة.', 'لم نجد كلمات في هذه الصورة. صوّري جدول الكلمات عن قرب وبإضاءة جيدة.'), true);
+      return;
+    }
+    await addLesson({ id: newId(), title: str(data.title, 80) || todayTitle(), createdAt: Date.now(), words });
+    toast(`تمت إضافة ${countWords(words.length)} إلى دروسك.`);
+    goToLesson();
+  } catch (e) {
+    const code = e && e.code;
+    if (code === 'cancelled') return;
+    if (PERMANENT.has(code)) { claudeUnavailable(scanError(code)); return; }
+    showNote(scanError(code), true);
+  } finally {
+    scanCtl = null;
+    status.hidden = true;
+    $('#scan-actions').hidden = false;
+    URL.revokeObjectURL(url);
+  }
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-action]');
+  if (!b) return;
+  const L = current();
+  switch (b.dataset.action) {
+    case 'say': sayFrom(b, b.dataset.text); break;
+    case 'rate':
+      state.rate = Number(b.dataset.rate);
+      LS.set('sw-rate', state.rate);
+      renderSpeed();
+      break;
+    case 'open': openLesson(b.dataset.id); break;
+    case 'filter':
+      if (state.playing) stopPlay();
+      state.filter = b.dataset.f;
+      renderLesson();
+      break;
+    case 'play-all': playAll(); break;
+    case 'parse': parsePasted(); break;
+    case 'profile': showWelcomeForm(); break;
+    case 'enter-app': enterApp(); break;
+    case 'pick': $('#' + b.dataset.target).click(); break;
+    case 'stop-scan': if (scanCtl) scanCtl.abort(); break;
+    case 'new-lesson':
+      addLesson({ id: newId(), title: 'درس جديد', createdAt: Date.now(), words: [] }, { edit: true });
+      setTimeout(() => { goToLesson(); $('#add-en').focus({ preventScroll: true }); }, 50);
+      break;
+    case 'save-sample': {
+      const copy = { id: newId(), title: SAMPLE.title, createdAt: Date.now(), words: JSON.parse(JSON.stringify(SAMPLE.words)) };
+      addLesson(copy).then(() => toast('تم حفظ الدرس في دروسك.'));
+      break;
+    }
+    case 'edit':
+      if (state.playing) stopPlay();
+      state.editing = !state.editing;
+      state.confirmDelete = false;
+      renderLesson();
+      break;
+    case 'del-word': {
+      if (L.sample) break;
+      const [gone] = L.words.splice(Number(b.dataset.i), 1);
+      render();
+      store.save(L);
+      if (gone) toast(`تم حذف ${gone.en}.`);
+      break;
+    }
+    case 'del-lesson':
+      if (L.sample) break;
+      if (!state.confirmDelete) {
+        state.confirmDelete = true;
+        renderLesson();
+        setTimeout(() => { if (state.confirmDelete) { state.confirmDelete = false; renderLesson(); } }, 4000);
+        break;
+      }
+      state.lessons = state.lessons.filter(l => l.id !== L.id);
+      store.remove(L.id);
+      openLesson(state.lessons[0] ? state.lessons[0].id : 'sample');
+      toast('تم حذف الدرس.');
+      break;
+  }
+});
+
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'cam-input' || t.id === 'gallery-input') {
+    const f = t.files && t.files[0];
+    t.value = '';
+    scan(f);
+  } else if (t.id === 'accent') {
+    state.accent = t.value;
+    LS.set('sw-accent', state.accent);
+  } else if (t.id === 'title-input') {
+    const L = current();
+    const v = str(t.value, 80);
+    if (!L.sample && v && v !== L.title) { L.title = v; renderNav(); store.save(L); }
+  } else if (t.dataset && t.dataset.edit) {
+    const L = current();
+    const i = Number(t.dataset.i);
+    const w = L.words[i];
+    if (L.sample || !w) return;
+    if (t.dataset.edit === 'ar') {
+      w.ar = str(t.value, 120);
+    } else if (t.dataset.edit === 'pos') {
+      L.words[i] = normWord({ ...w, pos: t.value, forms: t.value === 'verb' ? w.forms : null });
+      renderLesson();
+    }
+    store.save(L);
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.id === 'title-input') e.target.blur();
+});
+
+$('#add-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const L = current();
+  if (L.sample) return;
+  const en = str($('#add-en').value, 80);
+  if (!en) return;
+  L.words.push(normWord({ en, ar: $('#add-ar').value, pos: $('#add-pos').value, tag: '' }));
+  $('#add-en').value = '';
+  $('#add-ar').value = '';
+  state.filter = 'all';
+  render();
+  store.save(L);
+  $('#add-en').focus({ preventScroll: true });
+});
+
+document.addEventListener('paste', e => {
+  if ($('#app').hidden) return;
+  if (e.target.closest && e.target.closest('input, textarea')) return;
+  const item = [...(e.clipboardData?.items || [])].find(it => it.kind === 'file' && it.type.startsWith('image/'));
+  if (!item) return;
+  e.preventDefault();
+  if (claudeOff) showNote(g('هذه صورة وليست نصًا. في Google Lens اختر «نسخ» للنص نفسه ثم الصقه في المربع.', 'هذه صورة وليست نصًا. في Google Lens اختاري «نسخ» للنص نفسه ثم الصقيه في المربع.'), true);
+  else scan(item.getAsFile());
+});
+
+/* ---------- start ---------- */
+if (![0.5, 0.75, 1, 1.25].includes(state.rate)) state.rate = 1;
+renderProfile();
+renderSpeed();
+render();
+if (state.profile) showHello(); else showWelcomeForm();
+checkScanAvailable();
+store.init()
+  .then(() => store.load())
+  .then(lessons => {
+    state.lessons = lessons;
+    const saved = LS.get('sw-current', 'sample');
+    if (lessons.some(l => l.id === saved)) state.currentId = saved;
+    render();
+  })
+  .catch(() => {});
+})();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+}
+</script>
+</body>
+</html>

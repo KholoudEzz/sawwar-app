@@ -93,8 +93,8 @@ svg{display:block}
 .avatar svg{width:100%;height:100%}
 
 /* Welcome */
-.welcome .wrap{padding-block:28px 48px}
-.welcome-card{max-width:480px;margin:0 auto;background:var(--sheet);border:1px solid var(--line);border-radius:28px;padding:28px 22px;display:flex;flex-direction:column;gap:20px;text-align:center;box-shadow:0 22px 44px -28px rgba(70,35,140,.55)}
+.welcome .wrap{padding-block:28px 48px;display:flex;flex-direction:column;gap:16px}
+.welcome-card{width:100%;max-width:480px;margin:0 auto;background:var(--sheet);border:1px solid var(--line);border-radius:28px;padding:28px 22px;display:flex;flex-direction:column;gap:20px;text-align:center;box-shadow:0 22px 44px -28px rgba(70,35,140,.55)}
 .badge{width:68px;height:68px;margin:0 auto;border-radius:22px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--font-en);font-weight:700;font-size:1.6rem;transform:rotate(-6deg)}
 .welcome h1{margin:0;font-family:var(--font-display);font-weight:800;font-size:clamp(1.8rem,7vw,2.4rem);line-height:1.15;text-wrap:balance}
 .welcome p{margin:0;color:var(--muted)}
@@ -115,6 +115,8 @@ svg{display:block}
 .btn.big{min-height:58px;font-size:1.2rem;border-radius:18px;width:100%}
 .hello .avatar{width:156px;height:156px;margin:0 auto;border:5px solid var(--accent);animation:pop .5s cubic-bezier(.2,1.4,.4,1) both}
 .hello h1 span{color:var(--accent)}
+.install{padding:18px;gap:12px;border-style:dashed;box-shadow:none}
+.install p{text-align:right;font-size:.95rem;line-height:1.7}
 @keyframes pop{from{transform:scale(.6);opacity:.2}to{transform:scale(1);opacity:1}}
 
 /* Top bar */
@@ -293,6 +295,14 @@ main.wrap{display:flex;flex-direction:column;gap:22px;padding-block:20px 56px}
         <p data-t="helloSub">جاهز نتعلم كلمات جديدة؟</p>
         <button type="button" class="btn primary big" data-action="enter-app" data-t="enterBtn">ابدأ</button>
         <button type="button" class="linkish" data-action="profile">تغيير الاسم أو الصورة</button>
+      </div>
+
+      <div class="welcome-card install" id="install-box" hidden>
+        <button type="button" class="btn primary big" id="install-btn" data-action="install" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          تثبيت التطبيق على الموبايل
+        </button>
+        <p id="install-help"></p>
       </div>
     </div>
   </section>
@@ -976,6 +986,46 @@ $('#welcome-form').addEventListener('submit', e => {
   if (tts.ok && tts.voice('ar')) tts.speak(`مرحبًا يا ${name}`, { lang: 'ar', rate: 1 });
 });
 
+/* ---------- installing on the phone (the standalone app only; inside claude.ai there is nothing to install) ---------- */
+const INSTALL_HELP = {
+  prompt: 'بعد التثبيت يفتح التطبيق من أيقونته مثل أي تطبيق، ويعمل بدون إنترنت.',
+  inapp: 'الرابط مفتوح داخل تطبيق آخر مثل واتساب أو فيسبوك، والتثبيت لا يعمل من هناك. الحل: القائمة ⋮ أعلى الشاشة ← «فتح في Chrome» أو «فتح في المتصفح»، ثم التثبيت من هناك.',
+  ios: 'للتثبيت على الآيفون: زر المشاركة أسفل الشاشة (مربع يخرج منه سهم) ← النزول في القائمة ← «إضافة إلى الشاشة الرئيسية» ← «إضافة».',
+  iosOther: 'التثبيت على الآيفون يتم من متصفح Safari: فتح نفس الرابط في Safari، ثم زر المشاركة ← «إضافة إلى الشاشة الرئيسية» ← «إضافة».',
+  android: 'للتثبيت من Chrome: القائمة ⋮ أعلى الشاشة ← «إضافة إلى الشاشة الرئيسية» أو «تثبيت التطبيق». في متصفح سامسونج: القائمة ☰ أسفل الشاشة ← «إضافة الصفحة إلى» ← «الشاشة الرئيسية». في موبايلات شاومي وريدمي، إذا لم تظهر الأيقونة: الإعدادات ← التطبيقات ← Chrome ← الأذونات ← تفعيل «اختصارات الشاشة الرئيسية».',
+};
+let installPrompt = null;
+const isIOS = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+function showInstall(kind) {
+  $('#install-box').hidden = false;
+  $('#install-btn').hidden = kind !== 'prompt';
+  $('#install-help').textContent = INSTALL_HELP[kind];
+}
+function setupInstall() {
+  const installed = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  if (hasClaude || installed) return;
+  const ua = navigator.userAgent;
+  addEventListener('beforeinstallprompt', e => { e.preventDefault(); installPrompt = e; showInstall('prompt'); });
+  addEventListener('appinstalled', () => {
+    installPrompt = null;
+    $('#install-box').hidden = true;
+    toast('تم تثبيت التطبيق. ستجده بين تطبيقات الموبايل باسم «صوّر واسمع».');
+  });
+  if (/FBAN|FBAV|Instagram|WhatsApp|Snapchat|TikTok|Line\//i.test(ua) || /Android.*; wv\)/.test(ua)) showInstall('inapp');
+  else if (isIOS()) showInstall(/CriOS|FxiOS|EdgiOS/.test(ua) ? 'iosOther' : 'ios');
+  else if (/Android/.test(ua)) setTimeout(() => { if (!installPrompt) showInstall('android'); }, 2500);
+}
+async function runInstall() {
+  const p = installPrompt;
+  if (!p) { showInstall(isIOS() ? 'ios' : 'android'); return; }
+  installPrompt = null;
+  try {
+    await p.prompt();
+    const { outcome } = await p.userChoice;
+    if (outcome !== 'accepted') showInstall('android');
+  } catch { showInstall('android'); }
+}
+
 /* ---------- rendering ---------- */
 const FILTERS = [['all', 'الكل'], ['verb', 'أفعال'], ['noun', 'أسماء'], ['adjective', 'صفات'], ['rest', 'أخرى']];
 const matches = (w, f) => f === 'all' || (f === 'rest' ? !['verb', 'noun', 'adjective'].includes(w.pos) : w.pos === f);
@@ -1301,6 +1351,7 @@ document.addEventListener('click', e => {
     case 'parse': parsePasted(); break;
     case 'profile': showWelcomeForm(); break;
     case 'enter-app': enterApp(); break;
+    case 'install': runInstall(); break;
     case 'pick': $('#' + b.dataset.target).click(); break;
     case 'stop-scan': if (scanCtl) scanCtl.abort(); break;
     case 'new-lesson':
@@ -1405,6 +1456,7 @@ renderProfile();
 renderSpeed();
 render();
 if (state.profile) showHello(); else showWelcomeForm();
+setupInstall();
 checkScanAvailable();
 store.init()
   .then(() => store.load())

@@ -152,18 +152,14 @@ main.wrap{display:flex;flex-direction:column;gap:22px;padding-block:20px 56px}
 .scan .hello-line{color:var(--accent);font-family:var(--font-display);font-weight:800;font-size:1.15rem;line-height:1.2}
 .scan h1{font-family:var(--font-display);font-weight:800;font-size:clamp(1.55rem,5.4vw,2.1rem);line-height:1.2;margin:0;text-wrap:balance}
 .scan p{margin:0;color:var(--muted);max-width:62ch}
-.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;counter-reset:step}
-.steps li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
-.steps li::before{counter-increment:step;content:counter(step,arabic-indic);width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:1.05rem}
-.steps b{display:block;line-height:1.4}
-.steps span{display:block;color:var(--muted);font-size:.92rem}
+.scan .tip{font-size:.88rem}
+.paste-alt{border-top:1px dashed var(--line);padding-top:12px}
+.paste-alt summary{cursor:pointer;color:var(--accent);font-weight:600;padding-block:4px}
+.paste-body{display:flex;flex-direction:column;gap:10px;margin-top:10px}
 .paste{width:100%;min-height:132px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--paper);font-family:var(--font-en);font-size:1rem;line-height:1.5;resize:vertical}
 .paste::placeholder{color:var(--muted);font-family:var(--font-ar)}
 .scan-actions{display:flex;flex-wrap:wrap;gap:10px}
 .scan-actions .btn{flex:1 1 190px}
-.alt{border-top:1px dashed var(--line);padding-top:14px;display:flex;flex-direction:column;gap:10px}
-.alt p{font-size:.9rem}
-.alt .scan-actions .btn{flex:1 1 150px}
 .status{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;border-radius:14px;background:var(--accent-soft)}
 .status img{width:64px;height:64px;object-fit:cover;border-radius:10px;background:var(--line)}
 .status b{display:block;line-height:1.4}
@@ -330,47 +326,45 @@ main.wrap{display:flex;flex-direction:column;gap:22px;padding-block:20px 56px}
       <section class="scan" aria-labelledby="scan-title">
         <p class="hello-line" id="hello-line" hidden></p>
         <h1 id="scan-title" data-t="scanTitle">صوّر صفحة الكلمات</h1>
-        <p data-t="scanIntro">مجانًا وبدون اشتراك: اقرأ نص الصفحة بـ Google Lens والصقه هنا. يستخرج التطبيق الكلمات الإنجليزية، ويوضّح الأفعال وتصريفاتها، وتسمع نطق كل كلمة بالسرعة التي تناسبك.</p>
-        <ol class="steps">
-          <li><div><b data-t="step1Title">صوّر الصفحة بـ Google Lens</b><span data-t="step1Text">افتح تطبيق Google واضغط أيقونة الكاميرا، صوّر جدول الكلمات، ثم اضغط «اختيار الكل» أو حدّد النص، واضغط «نسخ».</span></div></li>
-          <li><div><b data-t="step2Title">الصق النص هنا</b><span data-t="step2Text">اضغط ضغطة طويلة داخل المربع واختر «لصق». على الآيفون يمكنك أيضًا اختيار «مسح النص ضوئيًا» من نفس القائمة.</span></div></li>
-        </ol>
-        <label class="vh" for="paste-box">النص المنسوخ من صورة الصفحة</label>
-        <textarea id="paste-box" class="paste" dir="auto" rows="5" spellcheck="false" autocapitalize="off" placeholder="مثال:
-notice (d) (v) يلاحظ
-cans (n) علب من المعدن"></textarea>
-        <div class="scan-actions">
-          <button type="button" class="btn primary" data-action="parse">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6.5h14M5 12h14M5 17.5h9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            <span data-t="parseBtn">استخرج الكلمات</span>
+        <p data-t="scanIntro">صوّر صفحة الكلمات، والتطبيق يقرأها بنفسه: يستخرج الكلمات الإنجليزية، ويوضّح الأفعال وتصريفاتها، وتسمع نطق كل كلمة بالسرعة التي تناسبك.</p>
+        <div class="scan-actions" id="scan-actions">
+          <button type="button" class="btn primary" data-action="pick" data-target="cam-input">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.6l1.2-1.8A1.5 1.5 0 0 1 10.5 3.5h3a1.5 1.5 0 0 1 1.2.7L15.9 6h1.6A2.5 2.5 0 0 1 20 8.5v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12.5" r="3.4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+            <span data-t="camBtn">صوّر الصفحة</span>
           </button>
+          <button type="button" class="btn" data-action="pick" data-target="gallery-input">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="10" r="1.8" fill="currentColor"/><path d="M4 17l5-4.5 3.5 3 3-2.5L20 17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            <span data-t="galBtn">اختر صورة</span>
+          </button>
+        </div>
+        <input id="cam-input" class="vh" type="file" accept="image/*" capture="environment" tabindex="-1" aria-hidden="true">
+        <input id="gallery-input" class="vh" type="file" accept="image/*" tabindex="-1" aria-hidden="true">
+        <p class="tip" id="scan-tip" data-t="tip">لأفضل قراءة: صوّر جدول الكلمات فقط، والصفحة مستقيمة والإضاءة جيدة.</p>
+        <div class="status" id="status" hidden>
+          <img id="status-img" alt="الصورة التي يتم قراءتها">
+          <div>
+            <b id="status-title">جاري قراءة الصفحة…</b>
+            <span id="status-sub">قد يستغرق ذلك حتى دقيقة.</span>
+            <div class="bar" aria-hidden="true"></div>
+          </div>
+          <button type="button" class="btn small" data-action="stop-scan">إيقاف</button>
         </div>
         <p class="note" id="scan-note" hidden></p>
 
-        <div class="alt" id="claude-scan" hidden>
-          <p data-t="altText">أو صوّر الصفحة هنا مباشرة، وClaude يقرأ الكلمات مع معانيها العربية وجمل أمثلة. هذه الطريقة تستهلك من رصيد حسابك في Claude.</p>
-          <div class="scan-actions" id="scan-actions">
-            <button type="button" class="btn small" data-action="pick" data-target="cam-input">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.6l1.2-1.8A1.5 1.5 0 0 1 10.5 3.5h3a1.5 1.5 0 0 1 1.2.7L15.9 6h1.6A2.5 2.5 0 0 1 20 8.5v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12.5" r="3.4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
-              <span data-t="camBtn">صوّر بالكاميرا</span>
-            </button>
-            <button type="button" class="btn small" data-action="pick" data-target="gallery-input">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="10" r="1.8" fill="currentColor"/><path d="M4 17l5-4.5 3.5 3 3-2.5L20 17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-              <span data-t="galBtn">اختر صورة</span>
+        <details class="paste-alt" id="paste-alt">
+          <summary>طريقة أخرى: لصق نص منسوخ من Google Lens</summary>
+          <div class="paste-body">
+            <p data-t="pasteHelp">انسخ نص الصفحة من Google Lens، ثم اضغط ضغطة طويلة داخل المربع واختر «لصق».</p>
+            <label class="vh" for="paste-box">النص المنسوخ من صورة الصفحة</label>
+            <textarea id="paste-box" class="paste" dir="auto" rows="5" spellcheck="false" autocapitalize="off" placeholder="مثال:
+notice (d) (v) يلاحظ
+cans (n) علب من المعدن"></textarea>
+            <button type="button" class="btn" data-action="parse">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6.5h14M5 12h14M5 17.5h9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <span data-t="parseBtn">استخرج الكلمات</span>
             </button>
           </div>
-          <input id="cam-input" class="vh" type="file" accept="image/*" capture="environment" tabindex="-1" aria-hidden="true">
-          <input id="gallery-input" class="vh" type="file" accept="image/*" tabindex="-1" aria-hidden="true">
-          <div class="status" id="status" hidden>
-            <img id="status-img" alt="الصورة التي يتم قراءتها">
-            <div>
-              <b id="status-title">جاري قراءة الصفحة…</b>
-              <span id="status-sub">قد يستغرق ذلك حتى دقيقة.</span>
-              <div class="bar" aria-hidden="true"></div>
-            </div>
-            <button type="button" class="btn small" data-action="stop-scan">إيقاف</button>
-          </div>
-        </div>
+        </details>
         <button type="button" class="linkish" data-action="new-lesson" data-t="manual">أو اكتب كلمات الدرس بنفسك</button>
       </section>
 
@@ -586,11 +580,29 @@ const normWords = list => Array.isArray(list) ? list.map(normWord).filter(Boolea
 
 /* ---------- reading text copied from Google Lens / Live Text ---------- */
 const TAG_ENTRY = /([A-Za-z][A-Za-z'\- ]*?)\s*((?:\(\s*(?:v|n|adj|adv|prep|d|ed|ied|pl)\s*\)\s*)+)([^A-Za-z(]*)/gi;
+// A line read right-to-left puts each Arabic meaning before its English word
+const TAG_ENTRY_RTL = /([^A-Za-z(]*)([A-Za-z][A-Za-z'\- ]*?)\s*((?:\(\s*(?:v|n|adj|adv|prep|d|ed|ied|pl)\s*\)\s*)+)/gi;
+const UNTAGGED_CELL = /(?:^|\|)\s*([a-z][a-z'\-]+(?: [a-z][a-z'\-]+){0,2})\s+([؀-ۿ][^|A-Za-z(]*)/g;
 const LATIN_RUN = /([A-Za-z][A-Za-z'\-]*(?:[ ]+[A-Za-z][A-Za-z'\-]*)*)([^A-Za-z]*)/g;
 const HEADER_WORDS = /\b(lesson|unit|page|pages|sb|wb|conjugation|vocabulary|exercise|workbook)\b/i;
 const AR_CHARS = /[؀-ۿ]/;
-const cleanAr = s => String(s || '').replace(/[^؀-ۿ\s\-–،]/g, ' ').replace(/\s+/g, ' ').replace(/^[\s\-–،]+|[\s\-–،]+$/g, '').slice(0, 120);
-const cleanEn = s => String(s || '').replace(/\s+/g, ' ').replace(/^[\s\-'.]+|[\s\-'.]+$/g, '').slice(0, 80);
+// Keeps the Arabic words only: no digits, and no lone letters left at either end by the photo reader
+const cleanAr = s => String(s || '')
+  .replace(/[٠-٩۰-۹]/g, ' ')
+  .replace(/[^؀-ۿ\s\-–،]/g, ' ')
+  .replace(/\s+/g, ' ').trim()
+  .replace(/^(?:[؀-ۿ] )+|(?: [؀-ۿ])+$/g, '')
+  .replace(/^[\s\-–،]+|[\s\-–،]+$/g, '')
+  .slice(0, 120);
+// Table borders often come out of the photo reader as stray "l", "I" or "|" beside a word
+const cleanEn = s => String(s || '').replace(/\s+/g, ' ').replace(/^[\s\-'.]+|[\s\-'.]+$/g, '').replace(/^(?:[lI1|]\s+)+(?=[A-Za-z]{2})/, '').replace(/(?:\s+[lI1|])+$/, '').slice(0, 80);
+// Common photo-reading slips in the book's tags: [n] {v} (adi) (y) ...
+const TAG_FIXES = { ad: 'adj', adi: 'adj', ad1: 'adj', adl: 'adj', 'ad]': 'adj', 'ad|': 'adj', ady: 'adj', aclv: 'adv', acv: 'adv', aov: 'adv', adw: 'adv', y: 'v' };
+const fixTags = text => text.replace(/[(\[{]\s*([A-Za-z1|\]]{1,4})\s*[)\]}]/g, (all, t) => {
+  const k = t.toLowerCase();
+  const fixed = TAG_FIXES[k] || k;
+  return /^(v|n|adj|adv|prep|d|ed|ied|pl)$/.test(fixed) ? `(${fixed})` : all;
+});
 const normTags = tags => (tags.match(/\(\s*[a-z]+\s*\)/gi) || []).map(t => t.replace(/\s+/g, '').toLowerCase()).join(' ');
 function posFromTags(tags) {
   const t = tags.toLowerCase();
@@ -613,12 +625,15 @@ function verbTableRow(words) {
   return { base: w[0], past: irr.past, pp: irr.pp, ing: ingForm(w[0]), irregular: true };
 }
 function parseText(raw) {
-  const text = String(raw || '').replace(/\r/g, '').replace(/[’‘]/g, "'");
+  // Invisible direction marks come along with mixed Arabic/English text; drop them before reading the lines
+  const text = fixTags(String(raw || '').replace(/\r/g, '').replace(/[‎‏‪-‮⁦-⁩]/g, '').replace(/[’‘]/g, "'"));
   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
   const tagged = (text.match(/\(\s*(v|n|adj|adv)\s*\)/gi) || []).length >= 2;
   const out = [];
   const seen = new Set();
   const add = w => {
+    // Word lists are lowercase; a capital usually comes from the start of a line ("Check", "New")
+    if (/^[A-Z][a-z'\-]+(?: [a-z'\-]+)*$/.test(w.en)) w.en = w.en[0].toLowerCase() + w.en.slice(1);
     const k = w.en.toLowerCase();
     if (w.en.length < 2 || seen.has(k)) return null;
     seen.add(k);
@@ -630,11 +645,25 @@ function parseText(raw) {
     if (row.arOnly) return row;
     let m;
     if (tagged) {
-      TAG_ENTRY.lastIndex = 0;
-      while ((m = TAG_ENTRY.exec(line))) {
-        const en = cleanEn(m[1]);
+      const rtl = /^[^A-Za-z؀-ۿ]*[؀-ۿ]/.test(line);
+      const re = rtl ? TAG_ENTRY_RTL : TAG_ENTRY;
+      const found = [];
+      re.lastIndex = 0;
+      while ((m = re.exec(line))) {
+        const [en, tags, ar] = rtl ? [m[2], m[3], m[1]] : [m[1], m[2], m[3]];
+        found.push({ at: m.index + m[0].indexOf(en), en, tags, ar });
+      }
+      // A word whose tag the photo reader lost, like "young people الشباب": a short lowercase phrase that opens
+      // the line or a table cell and sits right before its Arabic meaning
+      if (!rtl) {
+        UNTAGGED_CELL.lastIndex = 0;
+        while ((m = UNTAGGED_CELL.exec(line))) found.push({ at: m.index + m[0].indexOf(m[1]), en: m[1], tags: '', ar: m[2] });
+      }
+      found.sort((a, b) => a.at - b.at);
+      for (const f of found) {
+        const en = cleanEn(f.en);
         if (!en) continue;
-        const w = add({ en, tag: normTags(m[2]), pos: posFromTags(m[2]), ar: cleanAr(m[3]) });
+        const w = add({ en, tag: normTags(f.tags), pos: f.tags ? posFromTags(f.tags) : guessPos(en), ar: cleanAr(f.ar) });
         if (w) row.entries.push(w);
       }
       return row;
@@ -744,19 +773,13 @@ const T = {
   helloSub: ['جاهز نتعلم كلمات جديدة؟', 'جاهزة نتعلم كلمات جديدة؟'],
   enterBtn: ['ابدأ', 'ابدئي'],
   scanTitle: ['صوّر صفحة الكلمات', 'صوّري صفحة الكلمات'],
-  scanIntro: ['مجانًا وبدون اشتراك: اقرأ نص الصفحة بـ Google Lens والصقه هنا. يستخرج التطبيق الكلمات الإنجليزية، ويوضّح الأفعال وتصريفاتها، وتسمع نطق كل كلمة بالسرعة التي تناسبك.',
-              'مجانًا وبدون اشتراك: اقرئي نص الصفحة بـ Google Lens والصقيه هنا. يستخرج التطبيق الكلمات الإنجليزية، ويوضّح الأفعال وتصريفاتها، وتسمعين نطق كل كلمة بالسرعة التي تناسبكِ.'],
-  step1Title: ['صوّر الصفحة بـ Google Lens', 'صوّري الصفحة بـ Google Lens'],
-  step1Text: ['افتح تطبيق Google واضغط أيقونة الكاميرا، صوّر جدول الكلمات، ثم اضغط «اختيار الكل» أو حدّد النص، واضغط «نسخ».',
-              'افتحي تطبيق Google واضغطي أيقونة الكاميرا، صوّري جدول الكلمات، ثم اضغطي «اختيار الكل» أو حدّدي النص، واضغطي «نسخ».'],
-  step2Title: ['الصق النص هنا', 'الصقي النص هنا'],
-  step2Text: ['اضغط ضغطة طويلة داخل المربع واختر «لصق». على الآيفون يمكنك أيضًا اختيار «مسح النص ضوئيًا» من نفس القائمة.',
-              'اضغطي ضغطة طويلة داخل المربع واختاري «لصق». على الآيفون يمكنكِ أيضًا اختيار «مسح النص ضوئيًا» من نفس القائمة.'],
-  parseBtn: ['استخرج الكلمات', 'استخرجي الكلمات'],
-  altText: ['أو صوّر الصفحة هنا مباشرة، وClaude يقرأ الكلمات مع معانيها العربية وجمل أمثلة. هذه الطريقة تستهلك من رصيد حسابك في Claude.',
-            'أو صوّري الصفحة هنا مباشرة، وClaude يقرأ الكلمات مع معانيها العربية وجمل أمثلة. هذه الطريقة تستهلك من رصيد حسابكِ في Claude.'],
-  camBtn: ['صوّر بالكاميرا', 'صوّري بالكاميرا'],
+  scanIntro: ['صوّر صفحة الكلمات، والتطبيق يقرأها بنفسه: يستخرج الكلمات الإنجليزية، ويوضّح الأفعال وتصريفاتها، وتسمع نطق كل كلمة بالسرعة التي تناسبك.',
+              'صوّري صفحة الكلمات، والتطبيق يقرأها بنفسه: يستخرج الكلمات الإنجليزية، ويوضّح الأفعال وتصريفاتها، وتسمعين نطق كل كلمة بالسرعة التي تناسبكِ.'],
+  camBtn: ['صوّر الصفحة', 'صوّري الصفحة'],
   galBtn: ['اختر صورة', 'اختاري صورة'],
+  tip: ['لأفضل قراءة: صوّر جدول الكلمات فقط، والصفحة مستقيمة والإضاءة جيدة.', 'لأفضل قراءة: صوّري جدول الكلمات فقط، والصفحة مستقيمة والإضاءة جيدة.'],
+  pasteHelp: ['انسخ نص الصفحة من Google Lens، ثم اضغط ضغطة طويلة داخل المربع واختر «لصق».', 'انسخي نص الصفحة من Google Lens، ثم اضغطي ضغطة طويلة داخل المربع واختاري «لصق».'],
+  parseBtn: ['استخرج الكلمات', 'استخرجي الكلمات'],
   manual: ['أو اكتب كلمات الدرس بنفسك', 'أو اكتبي كلمات الدرس بنفسكِ'],
   addTitle: ['أضف كلمة إلى هذا الدرس', 'أضيفي كلمة إلى هذا الدرس'],
   addBtn: ['أضف الكلمة', 'أضيفي الكلمة'],
@@ -1212,7 +1235,7 @@ Reply with only JSON in this exact shape:
 {"title":"Unit 1 - Lesson 3","words":[{"en":"visit","tag":"(ed) (v)","pos":"verb","ar":"يزور","example":"We visit our grandma on Friday.","forms":{"base":"visit","past":"visited","pp":"visited","ing":"visiting","irregular":false}},{"en":"garden","tag":"(n)","pos":"noun","ar":"حديقة","example":"There are flowers in the garden.","forms":null}]}
 If the photo has no vocabulary entries, reply {"title":"","words":[]}.`;
 
-const lensHint = () => g('استخدم Google Lens وانسخ النص والصقه بالأعلى بدلًا من ذلك.', 'استخدمي Google Lens وانسخي النص والصقيه بالأعلى بدلًا من ذلك.');
+const lensHint = () => g('جرّب طريقة «لصق نص منسوخ من Google Lens» بالأسفل.', 'جرّبي طريقة «لصق نص منسوخ من Google Lens» بالأسفل.');
 function scanError(code) {
   const tryOther = g('جرّب صورة أخرى', 'جرّبي صورة أخرى');
   const msgs = {
@@ -1238,9 +1261,12 @@ const samplePromise = use('sample');
 let scanCtl = null;
 let claudeOff = false;
 
+// Inside claude.ai without Claude for this viewer: hide the photo buttons and offer pasting instead
 function claudeUnavailable(msg) {
   claudeOff = true;
-  $('#claude-scan').hidden = true;
+  $('#scan-actions').hidden = true;
+  $('#scan-tip').hidden = true;
+  $('#paste-alt').open = true;
   if (msg) showNote(msg, true);
 }
 async function checkScanAvailable() {
@@ -1248,12 +1274,11 @@ async function checkScanAvailable() {
   if (!s) { claudeUnavailable(''); return null; }
   const lim = await s.limits().catch(() => null);
   if (!lim || !lim.images) { claudeUnavailable(''); return null; }
-  if (!claudeOff) $('#claude-scan').hidden = false;
   return { s, img: lim.images };
 }
 
-async function prepareImage(file) {
-  const MAX = 2000;
+// Draws the photo upright on a canvas, shrinking big photos to MAX and enlarging small ones to MIN on the long side
+async function prepareCanvas(file, MAX = 2000, MIN = 0) {
   const url = URL.createObjectURL(file);
   try {
     const img = await new Promise((resolve, reject) => {
@@ -1263,15 +1288,22 @@ async function prepareImage(file) {
       el.src = url;
     });
     const w = img.naturalWidth, h = img.naturalHeight;
-    const k = Math.min(1, MAX / Math.max(w, h));
+    const long = Math.max(w, h);
+    const k = Math.min(MAX / long, Math.max(1, MIN / long));
     const c = document.createElement('canvas');
     c.width = Math.max(1, Math.round(w * k));
     c.height = Math.max(1, Math.round(h * k));
-    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-    return await new Promise((resolve, reject) => c.toBlob(b => b ? resolve(b) : reject(new Error('encode')), 'image/jpeg', 0.9));
+    const ctx = c.getContext('2d');
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, 0, 0, c.width, c.height);
+    return c;
   } finally {
     URL.revokeObjectURL(url);
   }
+}
+async function prepareImage(file, MAX = 2000) {
+  const c = await prepareCanvas(file, MAX);
+  return new Promise((resolve, reject) => c.toBlob(b => b ? resolve(b) : reject(new Error('encode')), 'image/jpeg', 0.9));
 }
 
 async function scan(file) {
@@ -1324,9 +1356,105 @@ async function scan(file) {
   } finally {
     scanCtl = null;
     status.hidden = true;
+    if (!claudeOff) $('#scan-actions').hidden = false;
+    URL.revokeObjectURL(url);
+  }
+}
+
+/* ---------- reading the photo on the phone itself: free, and offline after the first time (the installed app) ---------- */
+const TESS = new URL('tess/', location.href).href;
+let tessLib = null;
+let ocrJob = null;
+function loadTesseract() {
+  if (window.Tesseract) return Promise.resolve(window.Tesseract);
+  if (!tessLib) {
+    tessLib = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = TESS + 'tesseract.min.js';
+      s.onload = () => (window.Tesseract ? resolve(window.Tesseract) : reject(new Error('missing')));
+      s.onerror = () => reject(new Error('load'));
+      document.head.appendChild(s);
+    }).catch(e => { tessLib = null; throw e; });
+  }
+  return tessLib;
+}
+function setStatus(title, sub) {
+  $('#status-title').textContent = title;
+  $('#status-sub').textContent = sub;
+}
+// Rebuilds the text line by line, leaving out English-looking scraps the reader itself was unsure of
+function textFromBlocks(data) {
+  const out = [];
+  for (const b of data.blocks || []) for (const p of b.paragraphs || []) for (const l of p.lines || []) {
+    const words = (l.words || []).filter(w => w.confidence >= 45 || /[؀-ۿ]{2,}/.test(w.text));
+    if (words.length) out.push(words.map(w => w.text).join(' '));
+  }
+  return out.join('\n');
+}
+async function scanOnDevice(file) {
+  if (!file || ocrJob) return;
+  showNote('', false);
+  let canvas;
+  try { canvas = await prepareCanvas(file, 2800, 2400); }
+  catch { showNote(`لم نتمكن من فتح هذه الصورة. ${g('جرّب صورة أخرى', 'جرّبي صورة أخرى')} بصيغة JPG أو PNG.`, true); return; }
+
+  const url = URL.createObjectURL(file);
+  $('#status-img').src = url;
+  setStatus('تجهيز القراءة…', 'في أول مرة فقط يتم تحميل أدوات القراءة (حوالي ٩ ميجا).');
+  $('#status').hidden = false;
+  $('#scan-actions').hidden = true;
+  const job = ocrJob = { worker: null, cancelled: false };
+  let text = '';
+  try {
+    const Tesseract = await loadTesseract();
+    job.worker = await Tesseract.createWorker(['eng', 'ara'], 1, {
+      workerPath: TESS + 'worker.min.js',
+      corePath: TESS + 'core',
+      langPath: TESS + 'lang',
+      workerBlobURL: false,
+      logger: m => {
+        if (job.cancelled) return;
+        const pct = arNum(Math.round((m.progress || 0) * 100)) + '٪';
+        if (m.status === 'recognizing text') setStatus('نقرأ الكلمات من الصورة…', pct);
+        else if (/traineddata/.test(m.status)) setStatus('تجهيز القراءة…', `تحميل أدوات القراءة ${pct}`);
+      },
+    });
+    if (job.cancelled) return;
+    const { data } = await job.worker.recognize(canvas, {}, { text: true, blocks: true });
+    text = (data && (textFromBlocks(data) || data.text)) || '';
+  } catch {
+    if (!job.cancelled) showNote(g('تعذّر تشغيل القراءة. في أول مرة يلزم اتصال بالإنترنت لتحميل أدوات القراءة، ثم جرّب مرة أخرى.', 'تعذّر تشغيل القراءة. في أول مرة يلزم اتصال بالإنترنت لتحميل أدوات القراءة، ثم جرّبي مرة أخرى.'), true);
+    return;
+  } finally {
+    if (job.worker) job.worker.terminate().catch(() => {});
+    ocrJob = null;
+    $('#status').hidden = true;
     $('#scan-actions').hidden = false;
     URL.revokeObjectURL(url);
   }
+  if (job.cancelled) return;
+
+  const { title, words } = parseText(text);
+  if (!words.length) {
+    $('#paste-box').value = text.trim();
+    $('#paste-alt').open = true;
+    showNote(g('لم نتعرّف على كلمات في هذه الصورة. صوّر جدول الكلمات عن قرب وبإضاءة جيدة، أو صحّح النص الذي قرأه التطبيق في المربع بالأسفل ثم اضغط «استخرج الكلمات».',
+               'لم نتعرّف على كلمات في هذه الصورة. صوّري جدول الكلمات عن قرب وبإضاءة جيدة، أو صحّحي النص الذي قرأه التطبيق في المربع بالأسفل ثم اضغطي «استخرجي الكلمات».'), true);
+    return;
+  }
+  await addLesson({ id: newId(), title: title || todayTitle(), createdAt: Date.now(), words });
+  toast(`تمت إضافة ${countWords(words.length)}. ${g('راجعها واضغط «تعديل» لتصحيح أي كلمة.', 'راجعيها واضغطي «تعديل» لتصحيح أي كلمة.')}`);
+  goToLesson();
+}
+function cancelOnDevice() {
+  if (!ocrJob) return;
+  ocrJob.cancelled = true;
+  if (ocrJob.worker) ocrJob.worker.terminate().catch(() => {});
+}
+// Inside claude.ai the photo goes to Claude; in the installed app it is read on the phone
+function readPhoto(file) {
+  if (!file) return;
+  if (hasClaude) scan(file); else scanOnDevice(file);
 }
 
 /* ---------- events ---------- */
@@ -1353,7 +1481,7 @@ document.addEventListener('click', e => {
     case 'enter-app': enterApp(); break;
     case 'install': runInstall(); break;
     case 'pick': $('#' + b.dataset.target).click(); break;
-    case 'stop-scan': if (scanCtl) scanCtl.abort(); break;
+    case 'stop-scan': if (scanCtl) scanCtl.abort(); cancelOnDevice(); break;
     case 'new-lesson':
       addLesson({ id: newId(), title: 'درس جديد', createdAt: Date.now(), words: [] }, { edit: true });
       setTimeout(() => { goToLesson(); $('#add-en').focus({ preventScroll: true }); }, 50);
@@ -1398,7 +1526,7 @@ document.addEventListener('change', e => {
   if (t.id === 'cam-input' || t.id === 'gallery-input') {
     const f = t.files && t.files[0];
     t.value = '';
-    scan(f);
+    readPhoto(f);
   } else if (t.id === 'accent') {
     state.accent = t.value;
     LS.set('sw-accent', state.accent);
@@ -1446,8 +1574,8 @@ document.addEventListener('paste', e => {
   const item = [...(e.clipboardData?.items || [])].find(it => it.kind === 'file' && it.type.startsWith('image/'));
   if (!item) return;
   e.preventDefault();
-  if (claudeOff) showNote(g('هذه صورة وليست نصًا. في Google Lens اختر «نسخ» للنص نفسه ثم الصقه في المربع.', 'هذه صورة وليست نصًا. في Google Lens اختاري «نسخ» للنص نفسه ثم الصقيه في المربع.'), true);
-  else scan(item.getAsFile());
+  if (hasClaude && claudeOff) showNote(g('هذه صورة وليست نصًا. في Google Lens اختر «نسخ» للنص نفسه ثم الصقه في المربع.', 'هذه صورة وليست نصًا. في Google Lens اختاري «نسخ» للنص نفسه ثم الصقيه في المربع.'), true);
+  else readPhoto(item.getAsFile());
 });
 
 /* ---------- start ---------- */
@@ -1457,7 +1585,7 @@ renderSpeed();
 render();
 if (state.profile) showHello(); else showWelcomeForm();
 setupInstall();
-checkScanAvailable();
+if (hasClaude) checkScanAvailable();
 store.init()
   .then(() => store.load())
   .then(lessons => {

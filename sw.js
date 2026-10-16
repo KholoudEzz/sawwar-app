@@ -1,5 +1,5 @@
 // Keeps the app working without internet: the app files are stored on the phone after the first visit.
-const CACHE = 'sawwar-v1';
+const CACHE = 'sawwar-v2';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', e => {
@@ -29,7 +29,11 @@ self.addEventListener('fetch', e => {
       );
       return;
     }
-    e.respondWith(caches.match(req).then(hit => hit || fetch(req)));
+    // The photo-reading files (tess/) are kept after their first download so reading works offline.
+    e.respondWith(caches.match(req).then(hit => hit || fetch(req).then(res => {
+      if (res.ok && url.pathname.includes('/tess/')) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(req, copy)); }
+      return res;
+    })));
     return;
   }
 
